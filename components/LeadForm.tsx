@@ -25,26 +25,27 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const desiredAmountOptions = [
-    { value: 5000, label: '5,000 BGN' },
-    { value: 10000, label: '10,000 BGN' },
-    { value: 25000, label: '25,000 BGN' },
-    { value: 50000, label: '50,000 BGN' },
-    { value: 75000, label: '75,000 BGN' },
-    { value: 100000, label: '100,000 BGN' },
+    { value: 5000, label: '5.000 EUR' },
+    { value: 10000, label: '10.000 EUR' },
+    { value: 25000, label: '25.000 EUR' },
+    { value: 50000, label: '50.000 EUR' },
+    { value: 75000, label: '75.000 EUR' },
+    { value: 100000, label: '100.000 EUR' },
   ];
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.firstName.trim())
-      newErrors.firstName = 'First name is required';
-    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
+      newErrors.firstName = 'Vorname ist erforderlich';
+    if (!formData.lastName.trim())
+      newErrors.lastName = 'Nachname ist erforderlich';
+    if (!formData.email.trim()) newErrors.email = 'E-Mail ist erforderlich';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-      newErrors.email = 'Invalid email format';
-    if (!formData.phone.trim()) newErrors.phone = 'Phone is required';
+      newErrors.email = 'Ungültiges E-Mail-Format';
+    if (!formData.phone.trim()) newErrors.phone = 'Telefon ist erforderlich';
     if (!/^[+\d\s\-()]{7,}$/.test(formData.phone))
-      newErrors.phone = 'Invalid phone format';
+      newErrors.phone = 'Ungültiges Telefonformat';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -87,7 +88,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           htmlFor='firstName'
           className='mb-2 block text-sm font-semibold text-slate-700'
         >
-          First Name *
+          Vorname *
         </label>
         <input
           type='text'
@@ -98,7 +99,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           className={`w-full rounded-2xl border bg-white px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 ${
             errors.firstName ? 'border-red-500' : 'border-slate-300'
           }`}
-          placeholder='John'
+          placeholder='Max'
         />
         {errors.firstName && (
           <p className='text-red-600 text-sm mt-1'>{errors.firstName}</p>
@@ -110,7 +111,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           htmlFor='lastName'
           className='mb-2 block text-sm font-semibold text-slate-700'
         >
-          Last Name *
+          Nachname *
         </label>
         <input
           type='text'
@@ -121,7 +122,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           className={`w-full rounded-2xl border bg-white px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 ${
             errors.lastName ? 'border-red-500' : 'border-slate-300'
           }`}
-          placeholder='Doe'
+          placeholder='Müller'
         />
         {errors.lastName && (
           <p className='text-red-600 text-sm mt-1'>{errors.lastName}</p>
@@ -133,7 +134,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           htmlFor='email'
           className='mb-2 block text-sm font-semibold text-slate-700'
         >
-          Email *
+          E-Mail *
         </label>
         <input
           type='email'
@@ -156,7 +157,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           htmlFor='phone'
           className='mb-2 block text-sm font-semibold text-slate-700'
         >
-          Phone Number *
+          Telefonnummer *
         </label>
         <input
           type='tel'
@@ -167,7 +168,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           className={`w-full rounded-2xl border bg-white px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 ${
             errors.phone ? 'border-red-500' : 'border-slate-300'
           }`}
-          placeholder='+359 2 123 4567'
+          placeholder='+49 30 123 4567'
         />
         {errors.phone && (
           <p className='text-red-600 text-sm mt-1'>{errors.phone}</p>
@@ -179,7 +180,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           htmlFor='desiredAmount'
           className='mb-2 block text-sm font-semibold text-slate-700'
         >
-          How much would you like to borrow? *
+          Wie viel möchten Sie leihen? *
         </label>
         <select
           id='desiredAmount'
@@ -200,7 +201,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
         type='submit'
         className='w-full rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition duration-200 hover:bg-emerald-800'
       >
-        Continue to Booking
+        Zur Reservierung fortfahren
       </button>
     </motion.form>
   );

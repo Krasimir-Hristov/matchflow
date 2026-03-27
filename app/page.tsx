@@ -38,7 +38,7 @@ export default function Home() {
                 Matchflow
               </p>
               <h1 className='text-lg font-semibold text-slate-900 sm:text-xl'>
-                Premium Lending Concierge
+                Premium-Kreditberatung
               </h1>
             </div>
           </div>
@@ -47,13 +47,13 @@ export default function Home() {
               href='/'
               className='rounded-full px-4 py-2 text-slate-700 transition hover:bg-white hover:text-emerald-700'
             >
-              Client Flow
+              Kundenfluss
             </Link>
             <Link
               href='/admin'
               className='rounded-full px-4 py-2 text-slate-700 transition hover:bg-white hover:text-emerald-700'
             >
-              Broker Dashboard
+              Makler-Dashboard
             </Link>
           </div>
         </div>

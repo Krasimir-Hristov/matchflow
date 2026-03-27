@@ -86,7 +86,7 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
     }
   };
 
-  const monthYearString = currentMonth.toLocaleString('en-US', {
+  const monthYearString = currentMonth.toLocaleString('de-DE', {
     month: 'long',
     year: 'numeric',
   });
@@ -99,7 +99,7 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
     >
       <div>
         <h3 className='mb-4 text-lg font-semibold text-slate-900'>
-          Select a Date
+          Datum wählen
         </h3>
 
         <div className='mb-4 flex items-center justify-between'>
@@ -121,7 +121,7 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
         </div>
 
         <div className='grid grid-cols-7 gap-2 mb-2'>
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+          {['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'].map((day) => (
             <div
               key={day}
               className='text-center text-xs font-semibold uppercase tracking-[0.14em] text-slate-500'
@@ -167,7 +167,7 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
           animate={{ opacity: 1, y: 0 }}
         >
           <h3 className='mb-4 text-lg font-semibold text-slate-900'>
-            Select a Time
+            Zeit wählen
           </h3>
           <div className='grid grid-cols-4 gap-2'>
             {timeSlots.map((time) => (
@@ -194,9 +194,9 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
           className='rounded-[1.5rem] border border-emerald-100 bg-linear-to-br from-emerald-50 to-white p-4'
         >
           <p className='text-sm text-slate-700'>
-            Meeting scheduled for:{' '}
+            Besprechung geplant für:{' '}
             <span className='font-semibold text-emerald-700'>
-              {new Date(selectedDate).toLocaleDateString('bg-BG', {
+              {new Date(selectedDate).toLocaleDateString('de-DE', {
                 weekday: 'long',
                 month: 'long',
                 day: 'numeric',
@@ -212,7 +212,7 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
         disabled={!selectedDate || !selectedTime}
         className='w-full rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition duration-200 hover:bg-emerald-800 disabled:bg-slate-300'
       >
-        Confirm Booking
+        Reservierung bestätigen
       </button>
     </motion.div>
   );

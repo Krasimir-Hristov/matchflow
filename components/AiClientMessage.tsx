@@ -62,22 +62,23 @@ export function AiClientMessage({
         <div className='rounded-[2rem] border border-white/70 bg-white/82 p-8 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl sm:p-10'>
           <div className='mb-8 text-center'>
             <p className='text-xs font-semibold uppercase tracking-[0.26em] text-emerald-700/80'>
-              Advisor brief
+              Beraternotiz
             </p>
             <h2 className='mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl'>
-              Your personalized financing summary
+              Ihre persönliche Finanzierungszusammenfassung
             </h2>
             <p className='mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600'>
-              Our AI advisor distilled your shortlisted offers into a concise
-              recommendation before you book time with a lending specialist.
+              Unser KI-Berater hat Ihre ausgewählten Angebote zu einer
+              prägnanten Empfehlung verdichtet, bevor Sie einen Termin mit einem
+              Kreditspezialisten vereinbaren.
             </p>
           </div>
 
           <div className='mb-8 flex flex-wrap justify-center gap-3'>
             {[
-              'Tailored analysis',
-              'Bank-grade handling',
-              'Broker-reviewed next step',
+              'Maßgeschneiderte Analyse',
+              'Bank-Niveau-Verarbeitung',
+              'Von Makler überprüfter nächster Schritt',
             ].map((badge) => (
               <span
                 key={badge}
@@ -98,11 +99,11 @@ export function AiClientMessage({
                 <Loader2 className='h-8 w-8 text-emerald-700' />
               </motion.div>
               <p className='text-lg font-medium text-slate-800'>
-                Preparing your recommendation
+                Vorbereitung Ihrer Empfehlung
               </p>
               <p className='mt-2 text-sm text-slate-500'>
-                We are reviewing your selections and generating a concise
-                advisory note.
+                Wir überprüfen Ihre Auswahl und erstellen eine prägnante
+                Beraternotiz.
               </p>
             </div>
           )}
@@ -115,7 +116,7 @@ export function AiClientMessage({
             >
               <AlertCircle className='mt-0.5 h-5 w-5 shrink-0 text-red-600' />
               <div>
-                <h3 className='font-semibold text-red-800'>Error</h3>
+                <h3 className='font-semibold text-red-800'>Fehler</h3>
                 <p className='text-red-700 text-sm'>{error}</p>
               </div>
             </motion.div>
@@ -130,10 +131,10 @@ export function AiClientMessage({
             >
               <div className='mb-4 flex items-center justify-between gap-3'>
                 <p className='text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700/80'>
-                  Advisory note
+                  Beraternotiz
                 </p>
                 <span className='rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-medium text-emerald-800'>
-                  {likedOfferIds.length} shortlisted
+                  {likedOfferIds.length} ausgewählt
                 </span>
               </div>
               <p className='text-lg leading-8 text-slate-800'>{message}</p>
@@ -145,14 +146,14 @@ export function AiClientMessage({
               onClick={() => window.history.back()}
               className='rounded-full border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-50'
             >
-              Back
+              Zurück
             </button>
             <button
               onClick={() => onComplete(likedOfferIds)}
               disabled={loading || !!error}
               className='rounded-full bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800 disabled:bg-emerald-300'
             >
-              Continue to Booking
+              Zur Reservierung fortfahren
             </button>
           </div>
         </div>

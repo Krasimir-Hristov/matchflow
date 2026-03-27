@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { Offer } from '@/lib/types';
+import { Heart, X } from 'lucide-react';
 import {
   motion,
   useMotionValue,
@@ -16,9 +16,9 @@ interface SwipeCardProps {
 }
 
 const formatCurrency = (amount: number) =>
-  new Intl.NumberFormat('en-US', {
+  new Intl.NumberFormat('de-DE', {
     style: 'currency',
-    currency: 'BGN',
+    currency: 'EUR',
     maximumFractionDigits: 0,
   }).format(amount);
 
@@ -34,19 +34,42 @@ const getMonthlyPayment = (amount: number, yearlyRate: number) => {
 };
 
 const getOfferHighlights = (title: string) => {
-  if (title.toLowerCase().includes('business')) {
-    return ['Flexible terms', 'Dedicated advisor', 'Rapid underwriting'];
+  const normalizedTitle = title.toLowerCase();
+
+  if (
+    normalizedTitle.includes('unternehmen') ||
+    normalizedTitle.includes('betrieb') ||
+    normalizedTitle.includes('kanzlei') ||
+    normalizedTitle.includes('praxis')
+  ) {
+    return ['Flexible Laufzeit', 'Persoenliche Beratung', 'Schnelle Pruefung'];
   }
 
-  if (title.toLowerCase().includes('green')) {
-    return ['Sustainability incentive', 'Low-rate window', 'Upgrade funding'];
+  if (
+    normalizedTitle.includes('energie') ||
+    normalizedTitle.includes('elektro') ||
+    normalizedTitle.includes('hybrid')
+  ) {
+    return [
+      'Nachhaltiger Fokus',
+      'Guenstiger Zinssatz',
+      'Foerderfaehige Investition',
+    ];
   }
 
-  if (title.toLowerCase().includes('startup')) {
-    return ['Asset leasing', 'Founder-focused', 'Fast document review'];
+  if (
+    normalizedTitle.includes('startup') ||
+    normalizedTitle.includes('technik') ||
+    normalizedTitle.includes('e-commerce')
+  ) {
+    return [
+      'Digitale Abwicklung',
+      'Wachstumsorientiert',
+      'Kurze Bearbeitungszeit',
+    ];
   }
 
-  return ['Fast approval', 'Transparent pricing', 'Fixed repayment plan'];
+  return ['Schnelle Zusage', 'Transparente Konditionen', 'Planbare Monatsrate'];
 };
 
 export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
@@ -58,6 +81,15 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
   const monthlyPayment = getMonthlyPayment(offer.maxAmount, offer.interestRate);
   const highlights = getOfferHighlights(offer.title);
 
+  const animateSwipe = async (direction: 'left' | 'right') => {
+    await controls.start({
+      x: direction === 'right' ? 500 : -500,
+      opacity: 0,
+      transition: { duration: 0.3 },
+    });
+    onSwipe(direction);
+  };
+
   const handleDragEnd = async (
     _event: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
@@ -67,12 +99,7 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
 
     if (Math.abs(offset) > swipeThreshold) {
       const direction = offset > 0 ? 'right' : 'left';
-      await controls.start({
-        x: direction === 'right' ? 500 : -500,
-        opacity: 0,
-        transition: { duration: 0.3 },
-      });
-      onSwipe(direction);
+      await animateSwipe(direction);
     } else {
       controls.start({
         x: 0,
@@ -99,41 +126,34 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
         style={{ opacity: likeOpacity }}
         className='pointer-events-none absolute right-6 top-6 z-10 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700 shadow-sm'
       >
-        Shortlist
+        Merken
       </motion.div>
       <motion.div
         style={{ opacity: skipOpacity }}
         className='pointer-events-none absolute left-6 top-6 z-10 rounded-full border border-slate-300 bg-slate-50 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600 shadow-sm'
       >
-        Pass
+        Weiter
       </motion.div>
 
       <div className='flex h-full flex-col'>
         <div className='mb-4 flex items-center justify-between gap-3'>
           <div>
             <p className='text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700/80'>
-              Tailored lending option
+              Ausgewaehltes Finanzierungsangebot
             </p>
             <h2 className='mt-2 text-2xl font-semibold text-slate-950'>
               {offer.title}
             </h2>
           </div>
           <div className='rounded-full border border-emerald-200/70 bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-800'>
-            {offer.interestRate}% APR
+            {offer.interestRate}% Sollzins
           </div>
         </div>
 
-        <div className='relative mb-5 overflow-hidden rounded-[1.5rem] bg-slate-200'>
-          <div className='absolute inset-0 z-10 bg-linear-to-t from-slate-950/35 via-transparent to-transparent' />
-          <Image
-            src={offer.imageUrl}
-            alt={offer.title}
-            fill
-            sizes='(max-width: 640px) 100vw, 420px'
-            className='object-cover'
-          />
-          <div className='absolute bottom-4 left-4 z-20 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur-md'>
-            Premium reviewed offer
+        <div className='mb-4 rounded-[1.5rem] border border-emerald-200/50 bg-emerald-50/50 p-3'>
+          <div className='inline-flex gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-semibold text-emerald-700'>
+            <span className='text-emerald-500'>✓</span>
+            Premium geprueft
           </div>
         </div>
 
@@ -144,7 +164,7 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
         <div className='grid gap-3 sm:grid-cols-3'>
           <div className='rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-4'>
             <p className='text-xs uppercase tracking-[0.18em] text-slate-500'>
-              Maximum amount
+              Kreditrahmen
             </p>
             <p className='mt-2 text-lg font-semibold text-slate-950'>
               {formatCurrency(offer.maxAmount)}
@@ -152,7 +172,7 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
           </div>
           <div className='rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-4'>
             <p className='text-xs uppercase tracking-[0.18em] text-slate-500'>
-              Indicative APR
+              Sollzins
             </p>
             <p className='mt-2 text-lg font-semibold text-emerald-700'>
               {offer.interestRate}%
@@ -160,7 +180,7 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
           </div>
           <div className='rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-4'>
             <p className='text-xs uppercase tracking-[0.18em] text-slate-500'>
-              Monthly estimate
+              Monatsrate ca.
             </p>
             <p className='mt-2 text-lg font-semibold text-slate-950'>
               {formatCurrency(Math.round(monthlyPayment))}
@@ -179,13 +199,34 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
           ))}
         </div>
 
-        <div className='mt-auto flex items-center justify-between gap-3 pt-6 text-sm text-slate-500'>
-          <div className='rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm'>
-            Swipe left to skip
-          </div>
-          <div className='rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 font-medium text-emerald-800 shadow-sm'>
-            Swipe right to shortlist
-          </div>
+        <div className='mt-auto flex items-center justify-center gap-6 pt-6'>
+          <button
+            type='button'
+            aria-label='Angebot ueberspringen'
+            onClick={() => void animateSwipe('left')}
+            className='group flex h-16 w-16 items-center justify-center rounded-full border-2 border-rose-200 bg-white text-rose-500 shadow-[0_12px_30px_rgba(244,63,94,0.14)] transition hover:-translate-y-0.5 hover:border-rose-300 hover:text-rose-600 hover:shadow-[0_18px_36px_rgba(244,63,94,0.18)]'
+          >
+            <X
+              className='h-7 w-7 transition group-hover:scale-110'
+              strokeWidth={2.5}
+            />
+          </button>
+          <button
+            type='button'
+            aria-label='Angebot merken'
+            onClick={() => void animateSwipe('right')}
+            className='group flex h-20 w-20 items-center justify-center rounded-full border-2 border-emerald-200 bg-linear-to-br from-emerald-50 to-white text-emerald-600 shadow-[0_14px_34px_rgba(16,185,129,0.16)] transition hover:-translate-y-0.5 hover:border-emerald-300 hover:text-emerald-700 hover:shadow-[0_20px_40px_rgba(16,185,129,0.22)]'
+          >
+            <Heart
+              className='h-8 w-8 fill-current transition group-hover:scale-110'
+              strokeWidth={2.2}
+            />
+          </button>
+        </div>
+
+        <div className='mt-4 flex items-center justify-center gap-8 text-xs font-medium uppercase tracking-[0.16em] text-slate-400'>
+          <span>Skip</span>
+          <span>Like</span>
         </div>
       </div>
     </motion.div>

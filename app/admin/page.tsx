@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { ClientLead, Offer } from '@/lib/types';
+import { useState } from 'react';
+import { ClientLead } from '@/lib/types';
 import { getLeads } from '@/lib/storage';
 import { mockOffers } from '@/lib/mockOffers';
 import { AdminLeadDetails } from '@/components/AdminLeadDetails';
@@ -9,16 +9,9 @@ import { motion } from 'framer-motion';
 import { Home, Users } from 'lucide-react';
 
 export default function AdminPage() {
-  const [leads, setLeads] = useState<ClientLead[]>([]);
+  const [leads] = useState<ClientLead[]>(() => getLeads());
   const [selectedLead, setSelectedLead] = useState<ClientLead | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    const clientLeads = getLeads();
-    setLeads(clientLeads);
-    setLoading(false);
-  }, []);
+  const loading = false;
 
   const handleBack = () => {
     setSelectedLead(null);
@@ -43,11 +36,11 @@ export default function AdminPage() {
           <div className='flex items-center gap-3 mb-2'>
             <Users className='w-8 h-8 text-blue-600' />
             <h1 className='text-3xl font-bold text-gray-900'>
-              Broker Dashboard
+              Makler-Dashboard
             </h1>
           </div>
           <p className='text-gray-600'>
-            Manage upcoming client meetings and meetings
+            Bevorstehende Kundenbesprechungen verwalten
           </p>
         </div>
       </header>
@@ -62,21 +55,21 @@ export default function AdminPage() {
         >
           <div className='bg-white rounded-lg shadow p-6 border-l-4 border-blue-500'>
             <p className='text-gray-600 text-sm font-semibold'>
-              Total Meetings
+              Gesamtbesprechungen
             </p>
             <p className='text-3xl font-bold text-gray-900 mt-2'>
               {leads.length}
             </p>
           </div>
           <div className='bg-white rounded-lg shadow p-6 border-l-4 border-green-500'>
-            <p className='text-gray-600 text-sm font-semibold'>Upcoming</p>
+            <p className='text-gray-600 text-sm font-semibold'>Bevorstehend</p>
             <p className='text-3xl font-bold text-gray-900 mt-2'>
               {leads.filter((l) => new Date(l.bookedDate) >= new Date()).length}
             </p>
           </div>
           <div className='bg-white rounded-lg shadow p-6 border-l-4 border-purple-500'>
             <p className='text-gray-600 text-sm font-semibold'>
-              Avg. Loan Amount
+              Durchschn. Kreditbetrag
             </p>
             <p className='text-2xl font-bold text-gray-900 mt-2'>
               {leads.length > 0
@@ -85,7 +78,7 @@ export default function AdminPage() {
                       leads.length,
                   ).toLocaleString()
                 : 0}{' '}
-              BGN
+              EUR
             </p>
           </div>
         </motion.div>
@@ -102,16 +95,16 @@ export default function AdminPage() {
               <div className='inline-block'>
                 <div className='w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin' />
               </div>
-              <p className='mt-4 text-gray-600'>Loading meetings...</p>
+              <p className='mt-4 text-gray-600'>Lädt Besprechungen...</p>
             </div>
           ) : leads.length === 0 ? (
             <div className='p-12 text-center'>
               <Home className='w-12 h-12 text-gray-400 mx-auto mb-4' />
               <h3 className='text-lg font-semibold text-gray-800 mb-2'>
-                No meetings yet
+                Noch keine Besprechungen
               </h3>
               <p className='text-gray-600'>
-                Meetings will appear here as clients book them.
+                Besprechungen werden hier angezeigt, wenn Kunden sie buchen.
               </p>
             </div>
           ) : (
@@ -120,22 +113,22 @@ export default function AdminPage() {
                 <thead className='bg-gray-50 border-b border-gray-200'>
                   <tr>
                     <th className='px-6 py-4 text-left text-sm font-semibold text-gray-800'>
-                      Client Name
+                      Kundenname
                     </th>
                     <th className='px-6 py-4 text-left text-sm font-semibold text-gray-800'>
-                      Phone
+                      Telefon
                     </th>
                     <th className='px-6 py-4 text-left text-sm font-semibold text-gray-800'>
-                      Loan Amount
+                      Kreditbetrag
                     </th>
                     <th className='px-6 py-4 text-left text-sm font-semibold text-gray-800'>
-                      Date & Time
+                      Datum & Uhrzeit
                     </th>
                     <th className='px-6 py-4 text-left text-sm font-semibold text-gray-800'>
                       Status
                     </th>
                     <th className='px-6 py-4 text-left text-sm font-semibold text-gray-800'>
-                      Actions
+                      Aktionen
                     </th>
                   </tr>
                 </thead>
@@ -163,12 +156,12 @@ export default function AdminPage() {
                         </td>
                         <td className='px-6 py-4'>
                           <p className='font-semibold text-gray-900'>
-                            {lead.desiredAmount.toLocaleString()} BGN
+                            {lead.desiredAmount.toLocaleString('de-DE')} EUR
                           </p>
                         </td>
                         <td className='px-6 py-4 text-gray-900'>
                           <p className='font-semibold'>
-                            {meetingDate.toLocaleDateString('bg-BG', {
+                            {meetingDate.toLocaleDateString('de-DE', {
                               month: 'short',
                               day: 'numeric',
                             })}
@@ -185,7 +178,7 @@ export default function AdminPage() {
                                 : 'bg-gray-100 text-gray-800'
                             }`}
                           >
-                            {isUpcoming ? 'Upcoming' : 'Past'}
+                            {isUpcoming ? 'Bevorstehend' : 'Vorbei'}
                           </span>
                         </td>
                         <td className='px-6 py-4'>
@@ -193,7 +186,7 @@ export default function AdminPage() {
                             onClick={() => setSelectedLead(lead)}
                             className='px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition'
                           >
-                            View Details
+                            Details ansehen
                           </button>
                         </td>
                       </motion.tr>

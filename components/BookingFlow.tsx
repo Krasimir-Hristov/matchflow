@@ -73,14 +73,15 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
         <div className='grid gap-6 lg:grid-cols-[0.82fr_1.18fr]'>
           <div className='rounded-[2rem] border border-white/70 bg-slate-900 p-8 text-white shadow-[0_24px_80px_rgba(15,23,42,0.2)]'>
             <p className='text-xs font-semibold uppercase tracking-[0.26em] text-emerald-300'>
-              Guided booking
+              Geführte Reservierung
             </p>
             <h2 className='mt-4 text-3xl font-semibold'>
-              Move from interest to advisor call.
+              Von Interesse zum Berateranruf Übergehen.
             </h2>
             <p className='mt-4 text-sm leading-7 text-slate-300'>
-              Share your details, choose a meeting slot, and let a broker
-              finalize the best structure for your selected offers.
+              Teilen Sie Ihre Daten mit, wählen Sie einen Termin aus, und lassen
+              Sie einen Makler die beste Struktur für Ihre ausgewählten Angebote
+              finalisieren.
             </p>
 
             <div className='mt-8 space-y-4'>
@@ -96,21 +97,21 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
                   }`}
                 >
                   <p className='text-xs uppercase tracking-[0.22em] text-slate-400'>
-                    Step {idx + 1}
+                    Schritt {idx + 1}
                   </p>
                   <p className='mt-2 text-base font-medium text-white capitalize'>
                     {stepName === 'form'
-                      ? 'Client profile'
+                      ? 'Kundenprofil'
                       : stepName === 'calendar'
-                        ? 'Meeting schedule'
-                        : 'Confirmation'}
+                        ? 'Besprechungstermin'
+                        : 'Bestätigung'}
                   </p>
                 </div>
               ))}
             </div>
 
             <div className='mt-8 rounded-[1.5rem] border border-white/10 bg-white/5 p-5'>
-              <p className='text-sm text-slate-400'>Selected offers</p>
+              <p className='text-sm text-slate-400'>Ausgewählte Angebote</p>
               <p className='mt-2 text-3xl font-semibold text-emerald-300'>
                 {likedOfferIds.length}
               </p>
@@ -140,14 +141,14 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
                 exit={{ opacity: 0, x: 20 }}
               >
                 <p className='text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700/80'>
-                  Step 1
+                  Schritt 1
                 </p>
                 <h2 className='mb-3 mt-3 text-3xl font-semibold text-slate-950'>
-                  Tell us about yourself
+                  Erzählen Sie uns etwas über sich
                 </h2>
                 <p className='mb-8 max-w-2xl text-sm leading-7 text-slate-600'>
-                  We use these details to match you with the right broker and
-                  tailor the financing discussion.
+                  Wir verwenden diese Daten, um Sie mit dem richtigen Makler
+                  abzugleichen und die Finanzierungsdiskussion anzupassen.
                 </p>
                 <LeadForm onSubmit={handleFormSubmit} />
               </motion.div>
@@ -160,14 +161,14 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
                 exit={{ opacity: 0, x: 20 }}
               >
                 <p className='text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700/80'>
-                  Step 2
+                  Schritt 2
                 </p>
                 <h2 className='mb-3 mt-3 text-3xl font-semibold text-slate-950'>
-                  Book your meeting
+                  Termin buchen
                 </h2>
                 <p className='mb-8 max-w-2xl text-sm leading-7 text-slate-600'>
-                  Pick a weekday slot that works for you. Your advisor will
-                  already have your shortlisted offers before the call.
+                  Wählen Sie einen Wochentag aus, der für Sie passt. Ihr Berater
+                  wird bereits Ihre ausgewählten Angebote vor dem Anruf haben.
                 </p>
                 <BookingCalendar onSubmit={handleBookingSubmit} />
 
@@ -175,7 +176,7 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
                   onClick={() => setStep('form')}
                   className='mt-4 w-full rounded-full border border-slate-300 px-4 py-3 font-semibold text-slate-700 transition hover:bg-slate-50'
                 >
-                  Back to details
+                  Zurück zu Details
                 </button>
               </motion.div>
             )}
@@ -191,23 +192,24 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
                   <CheckCircle className='h-10 w-10 text-emerald-700' />
                 </div>
                 <p className='text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700/80'>
-                  Step 3
+                  Schritt 3
                 </p>
                 <h2 className='mb-3 mt-3 text-3xl font-semibold text-slate-950'>
-                  Booking confirmed
+                  Reservierung bestätigt
                 </h2>
                 <p className='mx-auto max-w-xl text-base leading-7 text-slate-600'>
-                  Thank you,{' '}
+                  Vielen Dank,{' '}
                   <span className='font-semibold'>{formData?.firstName}</span>.
-                  A broker from our team will contact you at{' '}
-                  <span className='font-semibold'>{formData?.phone}</span> and
-                  continue with the shortlisted financing options.
+                  Ein Makler aus unserem Team wird Sie unter{' '}
+                  <span className='font-semibold'>{formData?.phone}</span>{' '}
+                  kontaktieren und mit den ausgewählten Finanzierungsoptionen
+                  fortfahren.
                 </p>
 
                 <div className='mx-auto mb-6 mt-8 max-w-md rounded-[1.5rem] border border-emerald-100 bg-linear-to-br from-emerald-50 to-white p-5'>
                   <p className='text-sm text-slate-700'>
-                    <span className='font-semibold'>Meeting status:</span>{' '}
-                    Reserved and awaiting advisor confirmation.
+                    <span className='font-semibold'>Buchungsstatus:</span>{' '}
+                    Reserviert und warten auf Bestätigung durch Berater.
                   </p>
                 </div>
 
@@ -220,7 +222,7 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
                   }}
                   className='w-full rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition hover:bg-emerald-800'
                 >
-                  Return to offers
+                  Zu Angeboten zurück
                 </button>
               </motion.div>
             )}
@@ -229,8 +231,8 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
 
         <div className='mt-6 text-center text-sm text-slate-600'>
           <p>
-            Selected {likedOfferIds.length} loan offer
-            {likedOfferIds.length !== 1 ? 's' : ''}
+            Ausgewählte {likedOfferIds.length} Kreditangebot
+            {likedOfferIds.length !== 1 ? 'e' : ''}
           </p>
         </div>
       </motion.div>

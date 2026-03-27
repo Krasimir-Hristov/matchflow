@@ -8,7 +8,6 @@ export interface Offer {
   description: string;
   maxAmount: number;
   interestRate: number;
-  imageUrl: string;
 }
 
 export interface ClientLead {

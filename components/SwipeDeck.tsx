@@ -51,21 +51,21 @@ export function SwipeDeck({ offers, onComplete }: SwipeDeckProps) {
           className='relative w-full max-w-2xl rounded-[2rem] border border-white/60 bg-white/85 p-10 text-center shadow-[0_30px_90px_rgba(31,41,55,0.12)] backdrop-blur-xl'
         >
           <p className='mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700/80'>
-            Review complete
+            Überprüfung abgeschlossen
           </p>
           <h2 className='mb-4 text-4xl font-semibold text-slate-900'>
-            Your curated shortlist is ready.
+            Ihre kuratierte Shortlist ist bereit.
           </h2>
           <p className='mx-auto mb-8 max-w-xl text-base leading-7 text-slate-600'>
-            You liked {likedOffers.length} offer
-            {likedOffers.length !== 1 ? 's' : ''}. Continue to receive a guided
-            recommendation and schedule a consultation.
+            Sie haben {likedOffers.length} Angebot
+            {likedOffers.length !== 1 ? 'e' : ''} gemocht. Erhalten Sie eine
+            geführte Empfehlung und vereinbaren Sie eine Beratung.
           </p>
           <button
             onClick={() => window.location.reload()}
             className='rounded-full bg-emerald-700 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-emerald-800'
           >
-            Review again
+            Erneut überprüfen
           </button>
         </motion.div>
       </div>
@@ -81,22 +81,23 @@ export function SwipeDeck({ offers, onComplete }: SwipeDeckProps) {
       <div className='mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center'>
         <div className='max-w-2xl'>
           <div className='inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-800 shadow-sm backdrop-blur'>
-            Curated lending offers
+            Kuratierte Kreditangebote
           </div>
           <h1 className='mt-6 max-w-xl text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl'>
-            Premium financing, presented like a private advisory desk.
+            Premium-Finanzierung, präsentiert wie ein privates Beratungsbüro.
           </h1>
           <p className='mt-5 max-w-xl text-lg leading-8 text-slate-600'>
-            Compare pre-selected offers in a refined swipe flow built for trust,
-            speed, and clarity. Every card highlights the terms that matter
-            before you speak to a broker.
+            Vergleichen Sie vorausgewählte Angebote in einem raffinierten
+            Swipe-Flow, der auf Vertrauen, Geschwindigkeit und Klarheit
+            ausgelegt ist. Jede Karte hebt die Bedingungen hervor, die wichtig
+            sind, bevor Sie mit einem Makler sprechen.
           </p>
 
           <div className='mt-8 flex flex-wrap gap-3'>
             {[
-              'Bank-grade review',
-              'Curated lenders',
-              'Human advisor follow-up',
+              'Bank-Niveau-Überprüfung',
+              'Kuratierte Kreditgeber',
+              'Nachverfolgung durch Berater',
             ].map((badge) => (
               <span
                 key={badge}
@@ -109,19 +110,19 @@ export function SwipeDeck({ offers, onComplete }: SwipeDeckProps) {
 
           <div className='mt-10 grid gap-4 sm:grid-cols-3'>
             <div className='rounded-[1.5rem] border border-white/70 bg-white/80 p-5 shadow-[0_16px_50px_rgba(15,23,42,0.08)] backdrop-blur'>
-              <p className='text-sm text-slate-500'>Current review</p>
+              <p className='text-sm text-slate-500'>Aktuelle Überprüfung</p>
               <p className='mt-2 text-2xl font-semibold text-slate-900'>
                 {currentIndex + 1}/{offers.length}
               </p>
             </div>
             <div className='rounded-[1.5rem] border border-white/70 bg-white/80 p-5 shadow-[0_16px_50px_rgba(15,23,42,0.08)] backdrop-blur'>
-              <p className='text-sm text-slate-500'>Liked offers</p>
+              <p className='text-sm text-slate-500'>Gefallene Angebote</p>
               <p className='mt-2 text-2xl font-semibold text-emerald-700'>
                 {likedOffers.length}
               </p>
             </div>
             <div className='rounded-[1.5rem] border border-white/70 bg-white/80 p-5 shadow-[0_16px_50px_rgba(15,23,42,0.08)] backdrop-blur'>
-              <p className='text-sm text-slate-500'>Progress</p>
+              <p className='text-sm text-slate-500'>Fortschritt</p>
               <p className='mt-2 text-2xl font-semibold text-slate-900'>
                 {completion}%
               </p>
@@ -134,10 +135,10 @@ export function SwipeDeck({ offers, onComplete }: SwipeDeckProps) {
             <div className='mb-5 flex items-center justify-between gap-4'>
               <div>
                 <p className='text-sm font-medium uppercase tracking-[0.2em] text-slate-500'>
-                  Offer stack
+                  Angebotsübersicht
                 </p>
                 <p className='mt-2 text-sm text-slate-600'>
-                  Swipe right to shortlist, left to skip.
+                  Nach rechts wischen zum Merken, nach links zum Überspringen.
                 </p>
               </div>
               <div className='flex gap-2'>
@@ -184,9 +185,9 @@ export function SwipeDeck({ offers, onComplete }: SwipeDeckProps) {
           </div>
 
           <div className='flex items-center justify-between rounded-[1.5rem] border border-white/70 bg-slate-900 px-5 py-4 text-slate-50 shadow-[0_16px_45px_rgba(15,23,42,0.18)]'>
-            <p className='text-sm text-slate-300'>Shortlisted so far</p>
+            <p className='text-sm text-slate-300'>Bisher auf der Shortlist</p>
             <p className='text-lg font-semibold'>
-              {likedOffers.length} offer{likedOffers.length !== 1 ? 's' : ''}
+              {likedOffers.length} Angebot{likedOffers.length !== 1 ? 'e' : ''}
             </p>
           </div>
         </div>

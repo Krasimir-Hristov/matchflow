@@ -5,11 +5,6 @@ interface ClientMessageRequest {
   likedOfferIds: string[];
 }
 
-interface ClientMessageResponse {
-  data?: string;
-  error?: string;
-}
-
 export async function POST(req: Request): Promise<Response> {
   try {
     const { likedOfferIds } = (await req.json()) as ClientMessageRequest;
@@ -47,11 +42,11 @@ export async function POST(req: Request): Promise<Response> {
       .map((o) => `- ${o.title}: ${o.description}`)
       .join('\n');
 
-    const prompt = `You are a friendly financial advisor assistant. A client has shown interest in the following loan offers:
+    const prompt = `You are a friendly financial advisor assistant for the German lending market. A client has shown interest in the following loan offers:
 
 ${offersList}
 
-Write a short, engaging personalized message (2-3 sentences in Bulgarian) that:
+  Write a short, engaging personalized message (2-3 sentences in German) that:
 1. Acknowledges their interest in these specific loan types
 2. Summarizes what financial needs they seem to have
 3. Invites them to book a meeting with one of our financial brokers to discuss their options

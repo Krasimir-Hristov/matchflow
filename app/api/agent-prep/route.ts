@@ -6,11 +6,6 @@ interface AgentPrepRequest {
   offers: Offer[];
 }
 
-interface AgentPrepResponse {
-  data?: string;
-  error?: string;
-}
-
 export async function POST(req: Request): Promise<Response> {
   try {
     const { lead, offers } = (await req.json()) as AgentPrepRequest;
@@ -34,7 +29,7 @@ export async function POST(req: Request): Promise<Response> {
     // Get the liked offers
     const likedOffers = offers.filter((o) => lead.likedOfferIds.includes(o.id));
     const likedOffersList = likedOffers
-      .map((o) => `- ${o.title} (${o.maxAmount} BGN, ${o.interestRate}%)`)
+      .map((o) => `- ${o.title} (${o.maxAmount} EUR, ${o.interestRate}%)`)
       .join('\n');
 
     // Get all offers for context
@@ -46,7 +41,7 @@ export async function POST(req: Request): Promise<Response> {
 
 Client Information:
 - Name: ${lead.firstName} ${lead.lastName}
-- Desired Loan Amount: ${lead.desiredAmount.toLocaleString()} BGN
+- Desired Loan Amount: ${lead.desiredAmount.toLocaleString('de-DE')} EUR
 - Phone: ${lead.phone}
 - Email: ${lead.email}
 - Meeting Date & Time: ${lead.bookedDate} at ${lead.bookedTime}

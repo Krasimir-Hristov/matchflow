@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ClientLead, Offer } from '@/lib/types';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, AlertCircle } from 'lucide-react';
 
 interface AdminLeadDetailsProps {
   lead: ClientLead;
@@ -64,7 +64,7 @@ export function AdminLeadDetails({
             <h1 className='text-3xl font-bold text-gray-900'>
               {lead.firstName} {lead.lastName}
             </h1>
-            <p className='text-gray-600'>Client Meeting Details</p>
+            <p className='text-gray-600'>Kundentreffdetails</p>
           </div>
         </div>
       </header>
@@ -81,27 +81,27 @@ export function AdminLeadDetails({
             {/* Contact Card */}
             <div className='bg-white rounded-lg shadow p-6'>
               <h3 className='text-lg font-semibold text-gray-800 mb-4'>
-                Contact Information
+                Kontaktinformation
               </h3>
               <div className='space-y-4'>
                 <div>
                   <label className='text-sm text-gray-600 font-semibold'>
-                    Email
+                    E-Mail
                   </label>
                   <p className='text-gray-900 mt-1 break-all'>{lead.email}</p>
                 </div>
                 <div>
                   <label className='text-sm text-gray-600 font-semibold'>
-                    Phone
+                    Telefon
                   </label>
                   <p className='text-gray-900 mt-1 font-mono'>{lead.phone}</p>
                 </div>
                 <div>
                   <label className='text-sm text-gray-600 font-semibold'>
-                    Desired Amount
+                    Gewünschter Betrag
                   </label>
                   <p className='text-2xl font-bold text-green-600 mt-1'>
-                    {lead.desiredAmount.toLocaleString()} BGN
+                    {lead.desiredAmount.toLocaleString('de-DE')} EUR
                   </p>
                 </div>
               </div>
@@ -110,15 +110,15 @@ export function AdminLeadDetails({
             {/* Meeting Details Card */}
             <div className='bg-white rounded-lg shadow p-6'>
               <h3 className='text-lg font-semibold text-gray-800 mb-4'>
-                Meeting Details
+                Besprechungsdetails
               </h3>
               <div className='space-y-4'>
                 <div>
                   <label className='text-sm text-gray-600 font-semibold'>
-                    Date
+                    Datum
                   </label>
                   <p className='text-gray-900 mt-1 font-semibold'>
-                    {new Date(lead.bookedDate).toLocaleDateString('bg-BG', {
+                    {new Date(lead.bookedDate).toLocaleDateString('de-DE', {
                       weekday: 'long',
                       year: 'numeric',
                       month: 'long',
@@ -128,7 +128,7 @@ export function AdminLeadDetails({
                 </div>
                 <div>
                   <label className='text-sm text-gray-600 font-semibold'>
-                    Time
+                    Uhrzeit
                   </label>
                   <p className='text-gray-900 mt-1 font-semibold text-lg'>
                     {lead.bookedTime}
@@ -148,7 +148,7 @@ export function AdminLeadDetails({
             {/* Liked Offers Card */}
             <div className='bg-white rounded-lg shadow p-6'>
               <h3 className='text-lg font-semibold text-gray-800 mb-4'>
-                Selected Loan Offers ({likedOffers.length})
+                Ausgewählte Kreditangebote ({likedOffers.length})
               </h3>
               <div className='space-y-4'>
                 {likedOffers.length > 0 ? (
@@ -169,11 +169,11 @@ export function AdminLeadDetails({
                         <span className='text-gray-700'>
                           Max:{' '}
                           <span className='font-semibold text-green-600'>
-                            {offer.maxAmount.toLocaleString()} BGN
+                            {offer.maxAmount.toLocaleString('de-DE')} EUR
                           </span>
                         </span>
                         <span className='text-gray-700'>
-                          Rate:{' '}
+                          Satz:{' '}
                           <span className='font-semibold text-blue-600'>
                             {offer.interestRate}%
                           </span>
@@ -182,7 +182,7 @@ export function AdminLeadDetails({
                     </motion.div>
                   ))
                 ) : (
-                  <p className='text-gray-600'>No offers selected</p>
+                  <p className='text-gray-600'>Keine Angebote ausgewählt</p>
                 )}
               </div>
             </div>
@@ -191,7 +191,7 @@ export function AdminLeadDetails({
             <div className='bg-white rounded-lg shadow p-6'>
               <div className='flex justify-between items-center mb-4'>
                 <h3 className='text-lg font-semibold text-gray-800'>
-                  AI Broker Preparation
+                  KI-Makler-Vorbereitung
                 </h3>
                 <button
                   onClick={handleGeneratePrepNotes}
@@ -229,7 +229,7 @@ export function AdminLeadDetails({
                 >
                   <AlertCircle className='w-5 h-5 text-red-600 shrink-0 mt-0.5' />
                   <div>
-                    <h4 className='font-semibold text-red-800'>Error</h4>
+                    <h4 className='font-semibold text-red-800'>Fehler</h4>
                     <p className='text-red-700 text-sm'>{notesError}</p>
                   </div>
                 </motion.div>
@@ -251,12 +251,12 @@ export function AdminLeadDetails({
               {!prepNotes && !loadingNotes && !notesError && (
                 <div className='text-center py-8 text-gray-600'>
                   <p className='mb-3 text-sm'>
-                    Click the button above to generate AI-powered preparation
-                    notes
+                    Klicken Sie auf die Schaltfläche oben, um KI-gestützte
+                    Vorkehrungsnoten zu generieren
                   </p>
                   <p className='text-xs text-gray-500'>
-                    Our AI advisor will analyze the client's interests and
-                    suggest focus areas for your meeting.
+                    Unser KI-Berater analysiert die Interessen des Kunden und
+                    schlägt Fokusgebiete für Ihr Treffen vor.
                   </p>
                 </div>
               )}
