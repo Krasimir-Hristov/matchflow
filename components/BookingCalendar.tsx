@@ -97,44 +97,40 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
       animate={{ opacity: 1, y: 0 }}
       className='space-y-6'
     >
-      {/* Date Selection */}
       <div>
-        <h3 className='text-lg font-semibold text-gray-800 mb-4'>
+        <h3 className='mb-4 text-lg font-semibold text-slate-900'>
           Select a Date
         </h3>
 
-        {/* Calendar Header */}
-        <div className='flex justify-between items-center mb-4'>
+        <div className='mb-4 flex items-center justify-between'>
           <button
             onClick={handlePrevMonth}
-            className='p-2 hover:bg-gray-100 rounded-lg transition'
+            className='rounded-full border border-slate-200 bg-white p-2 transition hover:bg-slate-50'
           >
-            <ChevronLeft className='w-5 h-5 text-gray-700' />
+            <ChevronLeft className='h-5 w-5 text-slate-700' />
           </button>
-          <h4 className='text-base font-semibold text-gray-800'>
+          <h4 className='text-base font-semibold text-slate-900'>
             {monthYearString}
           </h4>
           <button
             onClick={handleNextMonth}
-            className='p-2 hover:bg-gray-100 rounded-lg transition'
+            className='rounded-full border border-slate-200 bg-white p-2 transition hover:bg-slate-50'
           >
-            <ChevronRight className='w-5 h-5 text-gray-700' />
+            <ChevronRight className='h-5 w-5 text-slate-700' />
           </button>
         </div>
 
-        {/* Weekday Labels */}
         <div className='grid grid-cols-7 gap-2 mb-2'>
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
             <div
               key={day}
-              className='text-center text-xs font-semibold text-gray-600'
+              className='text-center text-xs font-semibold uppercase tracking-[0.14em] text-slate-500'
             >
               {day}
             </div>
           ))}
         </div>
 
-        {/* Calendar Grid */}
         <div className='grid grid-cols-7 gap-2'>
           {calendarDays.map((day, idx) => {
             const dateString = day ? formatDateString(day) : '';
@@ -150,12 +146,12 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
                   }
                 }}
                 disabled={isDisabled}
-                className={`py-2 text-sm font-medium rounded-lg transition ${
+                className={`rounded-2xl py-2.5 text-sm font-medium transition ${
                   isDisabled
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    ? 'cursor-not-allowed bg-slate-100 text-slate-400'
                     : isSelected
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white border border-gray-300 text-gray-800 hover:border-blue-500'
+                      ? 'bg-emerald-700 text-white shadow-lg shadow-emerald-900/15'
+                      : 'border border-slate-200 bg-white text-slate-800 hover:border-emerald-500'
                 }`}
               >
                 {day}
@@ -165,13 +161,12 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
         </div>
       </div>
 
-      {/* Time Selection */}
       {selectedDate && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h3 className='text-lg font-semibold text-gray-800 mb-4'>
+          <h3 className='mb-4 text-lg font-semibold text-slate-900'>
             Select a Time
           </h3>
           <div className='grid grid-cols-4 gap-2'>
@@ -179,10 +174,10 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
               <button
                 key={time}
                 onClick={() => setSelectedTime(time)}
-                className={`py-2 text-sm font-medium rounded-lg transition ${
+                className={`rounded-2xl py-2.5 text-sm font-medium transition ${
                   selectedTime === time
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white border border-gray-300 text-gray-800 hover:border-blue-500'
+                    ? 'bg-slate-900 text-white'
+                    : 'border border-slate-200 bg-white text-slate-800 hover:border-emerald-500'
                 }`}
               >
                 {time}
@@ -192,16 +187,15 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
         </motion.div>
       )}
 
-      {/* Submission */}
       {selectedDate && selectedTime && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className='bg-blue-50 p-4 rounded-lg border border-blue-200'
+          className='rounded-[1.5rem] border border-emerald-100 bg-linear-to-br from-emerald-50 to-white p-4'
         >
-          <p className='text-sm text-gray-700'>
+          <p className='text-sm text-slate-700'>
             Meeting scheduled for:{' '}
-            <span className='font-semibold text-blue-600'>
+            <span className='font-semibold text-emerald-700'>
               {new Date(selectedDate).toLocaleDateString('bg-BG', {
                 weekday: 'long',
                 month: 'long',
@@ -216,7 +210,7 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
       <button
         onClick={handleSubmit}
         disabled={!selectedDate || !selectedTime}
-        className='w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition duration-200'
+        className='w-full rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition duration-200 hover:bg-emerald-800 disabled:bg-slate-300'
       >
         Confirm Booking
       </button>

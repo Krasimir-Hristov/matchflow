@@ -82,11 +82,10 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
       onSubmit={handleSubmit}
       className='space-y-5'
     >
-      {/* First Name */}
       <div>
         <label
           htmlFor='firstName'
-          className='block text-sm font-semibold text-gray-700 mb-2'
+          className='mb-2 block text-sm font-semibold text-slate-700'
         >
           First Name *
         </label>
@@ -96,8 +95,8 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           name='firstName'
           value={formData.firstName}
           onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${
-            errors.firstName ? 'border-red-500' : 'border-gray-300'
+          className={`w-full rounded-2xl border bg-white px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 ${
+            errors.firstName ? 'border-red-500' : 'border-slate-300'
           }`}
           placeholder='John'
         />
@@ -106,11 +105,10 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
         )}
       </div>
 
-      {/* Last Name */}
       <div>
         <label
           htmlFor='lastName'
-          className='block text-sm font-semibold text-gray-700 mb-2'
+          className='mb-2 block text-sm font-semibold text-slate-700'
         >
           Last Name *
         </label>
@@ -120,8 +118,8 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           name='lastName'
           value={formData.lastName}
           onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${
-            errors.lastName ? 'border-red-500' : 'border-gray-300'
+          className={`w-full rounded-2xl border bg-white px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 ${
+            errors.lastName ? 'border-red-500' : 'border-slate-300'
           }`}
           placeholder='Doe'
         />
@@ -130,11 +128,10 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
         )}
       </div>
 
-      {/* Email */}
       <div>
         <label
           htmlFor='email'
-          className='block text-sm font-semibold text-gray-700 mb-2'
+          className='mb-2 block text-sm font-semibold text-slate-700'
         >
           Email *
         </label>
@@ -144,8 +141,8 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           name='email'
           value={formData.email}
           onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${
-            errors.email ? 'border-red-500' : 'border-gray-300'
+          className={`w-full rounded-2xl border bg-white px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 ${
+            errors.email ? 'border-red-500' : 'border-slate-300'
           }`}
           placeholder='john@example.com'
         />
@@ -154,11 +151,10 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
         )}
       </div>
 
-      {/* Phone */}
       <div>
         <label
           htmlFor='phone'
-          className='block text-sm font-semibold text-gray-700 mb-2'
+          className='mb-2 block text-sm font-semibold text-slate-700'
         >
           Phone Number *
         </label>
@@ -168,8 +164,8 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           name='phone'
           value={formData.phone}
           onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${
-            errors.phone ? 'border-red-500' : 'border-gray-300'
+          className={`w-full rounded-2xl border bg-white px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 ${
+            errors.phone ? 'border-red-500' : 'border-slate-300'
           }`}
           placeholder='+359 2 123 4567'
         />
@@ -178,11 +174,10 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
         )}
       </div>
 
-      {/* Desired Amount */}
       <div>
         <label
           htmlFor='desiredAmount'
-          className='block text-sm font-semibold text-gray-700 mb-2'
+          className='mb-2 block text-sm font-semibold text-slate-700'
         >
           How much would you like to borrow? *
         </label>
@@ -191,7 +186,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
           name='desiredAmount'
           value={formData.desiredAmount}
           onChange={handleChange}
-          className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-500'
+          className='w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500'
         >
           {desiredAmountOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -201,10 +196,9 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
         </select>
       </div>
 
-      {/* Submit Button */}
       <button
         type='submit'
-        className='w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200'
+        className='w-full rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition duration-200 hover:bg-emerald-800'
       >
         Continue to Booking
       </button>

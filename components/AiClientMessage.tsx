@@ -49,41 +49,71 @@ export function AiClientMessage({
   }, [likedOfferIds]);
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-linear-to-b from-purple-50 to-white p-4'>
+    <div className='relative min-h-screen overflow-hidden px-4 py-12 sm:px-6'>
+      <div className='absolute inset-0 -z-20 bg-linear-to-b from-emerald-50 via-white to-slate-100' />
+      <div className='absolute left-12 top-20 -z-10 h-72 w-72 rounded-full bg-emerald-200/30 blur-3xl' />
+      <div className='absolute right-0 top-32 -z-10 h-80 w-80 rounded-full bg-slate-300/25 blur-3xl' />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className='w-full max-w-2xl'
+        className='mx-auto w-full max-w-3xl'
       >
-        <div className='bg-white rounded-lg shadow-lg p-8'>
-          {/* Header */}
-          <h2 className='text-3xl font-bold text-gray-800 mb-2 text-center'>
-            Your Personalized Message
-          </h2>
-          <p className='text-center text-gray-600 mb-8'>
-            Here's what our AI advisor has to say about your loan interests
-          </p>
+        <div className='rounded-[2rem] border border-white/70 bg-white/82 p-8 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl sm:p-10'>
+          <div className='mb-8 text-center'>
+            <p className='text-xs font-semibold uppercase tracking-[0.26em] text-emerald-700/80'>
+              Advisor brief
+            </p>
+            <h2 className='mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl'>
+              Your personalized financing summary
+            </h2>
+            <p className='mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600'>
+              Our AI advisor distilled your shortlisted offers into a concise
+              recommendation before you book time with a lending specialist.
+            </p>
+          </div>
 
-          {/* Loading State */}
+          <div className='mb-8 flex flex-wrap justify-center gap-3'>
+            {[
+              'Tailored analysis',
+              'Bank-grade handling',
+              'Broker-reviewed next step',
+            ].map((badge) => (
+              <span
+                key={badge}
+                className='rounded-full border border-slate-200/80 bg-slate-50/80 px-4 py-2 text-sm font-medium text-slate-700'
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+
           {loading && (
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-              className='flex justify-center mb-8'
-            >
-              <Loader2 className='w-8 h-8 text-blue-500' />
-            </motion.div>
+            <div className='mb-8 flex min-h-56 flex-col items-center justify-center rounded-[1.75rem] border border-emerald-100 bg-linear-to-br from-emerald-50 to-white px-6 text-center'>
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                className='mb-4'
+              >
+                <Loader2 className='h-8 w-8 text-emerald-700' />
+              </motion.div>
+              <p className='text-lg font-medium text-slate-800'>
+                Preparing your recommendation
+              </p>
+              <p className='mt-2 text-sm text-slate-500'>
+                We are reviewing your selections and generating a concise
+                advisory note.
+              </p>
+            </div>
           )}
 
-          {/* Error State */}
           {error && !loading && (
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className='bg-red-50 border border-red-200 rounded-lg p-4 mb-8 flex gap-3'
+              className='mb-8 flex gap-3 rounded-[1.5rem] border border-red-200 bg-red-50 p-5'
             >
-              <AlertCircle className='w-5 h-5 text-red-600 shrink-0 mt-0.5' />
+              <AlertCircle className='mt-0.5 h-5 w-5 shrink-0 text-red-600' />
               <div>
                 <h3 className='font-semibold text-red-800'>Error</h3>
                 <p className='text-red-700 text-sm'>{error}</p>
@@ -91,40 +121,45 @@ export function AiClientMessage({
             </motion.div>
           )}
 
-          {/* Message Content */}
           {message && !loading && (
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className='bg-linear-to-br from-blue-50 to-purple-50 rounded-lg p-6 mb-8 border-l-4 border-blue-500'
+              className='mb-8 rounded-[1.75rem] border border-emerald-100 bg-linear-to-br from-white via-emerald-50/70 to-slate-50 p-7 shadow-inner'
             >
-              <p className='text-gray-800 text-lg leading-relaxed'>{message}</p>
+              <div className='mb-4 flex items-center justify-between gap-3'>
+                <p className='text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700/80'>
+                  Advisory note
+                </p>
+                <span className='rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-medium text-emerald-800'>
+                  {likedOfferIds.length} shortlisted
+                </span>
+              </div>
+              <p className='text-lg leading-8 text-slate-800'>{message}</p>
             </motion.div>
           )}
 
-          {/* Buttons */}
-          <div className='flex gap-4 justify-center'>
+          <div className='flex flex-col gap-3 sm:flex-row sm:justify-center'>
             <button
               onClick={() => window.history.back()}
-              className='px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg transition'
+              className='rounded-full border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-50'
             >
               Back
             </button>
             <button
               onClick={() => onComplete(likedOfferIds)}
               disabled={loading || !!error}
-              className='px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-lg transition'
+              className='rounded-full bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800 disabled:bg-emerald-300'
             >
-              Book a Meeting →
+              Continue to Booking
             </button>
           </div>
         </div>
 
-        {/* Info Footer */}
-        <div className='mt-8 text-center text-sm text-gray-600'>
+        <div className='mt-6 text-center text-sm text-slate-600'>
           <p>
-            You've selected {likedOfferIds.length} loan offer
+            You selected {likedOfferIds.length} loan offer
             {likedOfferIds.length !== 1 ? 's' : ''}
           </p>
         </div>

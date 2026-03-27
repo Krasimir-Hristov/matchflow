@@ -16,17 +16,19 @@ interface BookingFlowProps {
 
 type FlowStep = 'form' | 'calendar' | 'success';
 
+interface LeadFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  desiredAmount: number;
+}
+
 export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
   const [step, setStep] = useState<FlowStep>('form');
-  const [formData, setFormData] = useState<{
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    desiredAmount: number;
-  } | null>(null);
+  const [formData, setFormData] = useState<LeadFormData | null>(null);
 
-  const handleFormSubmit = (data: any) => {
+  const handleFormSubmit = (data: LeadFormData) => {
     setFormData(data);
     setStep('calendar');
   };
@@ -54,124 +56,178 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
     }
   };
 
+  const stepOrder: FlowStep[] = ['form', 'calendar', 'success'];
+  const currentStepIndex = stepOrder.indexOf(step);
+
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-linear-to-b from-green-50 to-white p-4'>
+    <div className='relative min-h-screen overflow-hidden px-4 py-12 sm:px-6'>
+      <div className='absolute inset-0 -z-20 bg-linear-to-b from-emerald-50 via-white to-slate-100' />
+      <div className='absolute left-0 top-24 -z-10 h-72 w-72 rounded-full bg-emerald-200/30 blur-3xl' />
+      <div className='absolute right-0 bottom-16 -z-10 h-80 w-80 rounded-full bg-slate-300/25 blur-3xl' />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className='w-full max-w-md'
+        className='mx-auto w-full max-w-5xl'
       >
-        <div className='bg-white rounded-lg shadow-lg p-8'>
-          {/* Step Indicator */}
-          <div className='flex justify-center gap-2 mb-8'>
-            {['form', 'calendar', 'success'].map((s, idx) => (
-              <div
-                key={s}
-                className={`h-2 rounded-full transition-all ${
-                  step === s
-                    ? 'bg-green-500 w-8'
-                    : ['form', 'calendar'].includes(step) &&
-                        ['form', 'calendar'].indexOf(s) <
-                          ['form', 'calendar'].indexOf(step)
-                      ? 'bg-green-500 w-3'
-                      : 'bg-gray-300 w-3'
-                }`}
-              />
-            ))}
+        <div className='grid gap-6 lg:grid-cols-[0.82fr_1.18fr]'>
+          <div className='rounded-[2rem] border border-white/70 bg-slate-900 p-8 text-white shadow-[0_24px_80px_rgba(15,23,42,0.2)]'>
+            <p className='text-xs font-semibold uppercase tracking-[0.26em] text-emerald-300'>
+              Guided booking
+            </p>
+            <h2 className='mt-4 text-3xl font-semibold'>
+              Move from interest to advisor call.
+            </h2>
+            <p className='mt-4 text-sm leading-7 text-slate-300'>
+              Share your details, choose a meeting slot, and let a broker
+              finalize the best structure for your selected offers.
+            </p>
+
+            <div className='mt-8 space-y-4'>
+              {stepOrder.map((stepName, idx) => (
+                <div
+                  key={stepName}
+                  className={`rounded-[1.5rem] border px-4 py-4 transition ${
+                    idx === currentStepIndex
+                      ? 'border-emerald-400/50 bg-emerald-400/10'
+                      : idx < currentStepIndex
+                        ? 'border-white/15 bg-white/8'
+                        : 'border-white/10 bg-white/4'
+                  }`}
+                >
+                  <p className='text-xs uppercase tracking-[0.22em] text-slate-400'>
+                    Step {idx + 1}
+                  </p>
+                  <p className='mt-2 text-base font-medium text-white capitalize'>
+                    {stepName === 'form'
+                      ? 'Client profile'
+                      : stepName === 'calendar'
+                        ? 'Meeting schedule'
+                        : 'Confirmation'}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className='mt-8 rounded-[1.5rem] border border-white/10 bg-white/5 p-5'>
+              <p className='text-sm text-slate-400'>Selected offers</p>
+              <p className='mt-2 text-3xl font-semibold text-emerald-300'>
+                {likedOfferIds.length}
+              </p>
+            </div>
           </div>
 
-          {/* Step 1: Lead Form */}
-          {step === 'form' && (
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-            >
-              <h2 className='text-2xl font-bold text-gray-800 mb-6'>
-                Tell us about yourself
-              </h2>
-              <LeadForm onSubmit={handleFormSubmit} />
-            </motion.div>
-          )}
+          <div className='rounded-[2rem] border border-white/70 bg-white/85 p-8 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl'>
+            <div className='mb-8 flex justify-center gap-2'>
+              {stepOrder.map((s, idx) => (
+                <div
+                  key={s}
+                  className={`h-2.5 rounded-full transition-all ${
+                    idx === currentStepIndex
+                      ? 'w-10 bg-slate-900'
+                      : idx < currentStepIndex
+                        ? 'w-6 bg-emerald-600'
+                        : 'w-2.5 bg-slate-300'
+                  }`}
+                />
+              ))}
+            </div>
 
-          {/* Step 2: Booking Calendar */}
-          {step === 'calendar' && (
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-            >
-              <h2 className='text-2xl font-bold text-gray-800 mb-6'>
-                Book Your Meeting
-              </h2>
-              <BookingCalendar onSubmit={handleBookingSubmit} />
-
-              <button
-                onClick={() => setStep('form')}
-                className='w-full mt-4 px-4 py-2 text-gray-600 font-semibold border border-gray-300 rounded-lg hover:bg-gray-50 transition'
+            {step === 'form' && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
               >
-                ← Back
-              </button>
-            </motion.div>
-          )}
-
-          {/* Step 3: Success */}
-          {step === 'success' && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className='text-center'
-            >
-              <CheckCircle className='w-16 h-16 text-green-500 mx-auto mb-4' />
-              <h2 className='text-2xl font-bold text-gray-800 mb-2'>
-                Booking Confirmed! ✓
-              </h2>
-              <p className='text-gray-600 mb-4'>
-                Thank you,{' '}
-                <span className='font-semibold'>{formData?.firstName}</span>!
-              </p>
-              <p className='text-gray-600 mb-6'>
-                A broker from our team will contact you at{' '}
-                <span className='font-semibold'>{formData?.phone}</span> for
-                your meeting.
-              </p>
-
-              <div className='bg-green-50 p-4 rounded-lg mb-6'>
-                <p className='text-sm text-gray-700'>
-                  <span className='font-semibold'>Meeting Date:</span>{' '}
-                  {formData && likedOfferIds.length > 0
-                    ? new Date(
-                        new Date().getFullYear(),
-                        new Date().getMonth(),
-                        parseInt(new Date().toISOString().split('-')[2]),
-                      ).toLocaleDateString('bg-BG', {
-                        weekday: 'long',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                    : 'TBD'}
+                <p className='text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700/80'>
+                  Step 1
                 </p>
-              </div>
+                <h2 className='mb-3 mt-3 text-3xl font-semibold text-slate-950'>
+                  Tell us about yourself
+                </h2>
+                <p className='mb-8 max-w-2xl text-sm leading-7 text-slate-600'>
+                  We use these details to match you with the right broker and
+                  tailor the financing discussion.
+                </p>
+                <LeadForm onSubmit={handleFormSubmit} />
+              </motion.div>
+            )}
 
-              <button
-                onClick={() => {
-                  if (typeof window !== 'undefined') {
-                    window.location.href = '/';
-                  }
-                  onSuccess();
-                }}
-                className='w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition'
+            {step === 'calendar' && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
               >
-                Start Over
-              </button>
-            </motion.div>
-          )}
+                <p className='text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700/80'>
+                  Step 2
+                </p>
+                <h2 className='mb-3 mt-3 text-3xl font-semibold text-slate-950'>
+                  Book your meeting
+                </h2>
+                <p className='mb-8 max-w-2xl text-sm leading-7 text-slate-600'>
+                  Pick a weekday slot that works for you. Your advisor will
+                  already have your shortlisted offers before the call.
+                </p>
+                <BookingCalendar onSubmit={handleBookingSubmit} />
+
+                <button
+                  onClick={() => setStep('form')}
+                  className='mt-4 w-full rounded-full border border-slate-300 px-4 py-3 font-semibold text-slate-700 transition hover:bg-slate-50'
+                >
+                  Back to details
+                </button>
+              </motion.div>
+            )}
+
+            {step === 'success' && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+                className='text-center'
+              >
+                <div className='mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100'>
+                  <CheckCircle className='h-10 w-10 text-emerald-700' />
+                </div>
+                <p className='text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700/80'>
+                  Step 3
+                </p>
+                <h2 className='mb-3 mt-3 text-3xl font-semibold text-slate-950'>
+                  Booking confirmed
+                </h2>
+                <p className='mx-auto max-w-xl text-base leading-7 text-slate-600'>
+                  Thank you,{' '}
+                  <span className='font-semibold'>{formData?.firstName}</span>.
+                  A broker from our team will contact you at{' '}
+                  <span className='font-semibold'>{formData?.phone}</span> and
+                  continue with the shortlisted financing options.
+                </p>
+
+                <div className='mx-auto mb-6 mt-8 max-w-md rounded-[1.5rem] border border-emerald-100 bg-linear-to-br from-emerald-50 to-white p-5'>
+                  <p className='text-sm text-slate-700'>
+                    <span className='font-semibold'>Meeting status:</span>{' '}
+                    Reserved and awaiting advisor confirmation.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.location.href = '/';
+                    }
+                    onSuccess();
+                  }}
+                  className='w-full rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition hover:bg-emerald-800'
+                >
+                  Return to offers
+                </button>
+              </motion.div>
+            )}
+          </div>
         </div>
 
-        {/* Info Footer */}
-        <div className='mt-8 text-center text-sm text-gray-600'>
+        <div className='mt-6 text-center text-sm text-slate-600'>
           <p>
             Selected {likedOfferIds.length} loan offer
             {likedOfferIds.length !== 1 ? 's' : ''}
