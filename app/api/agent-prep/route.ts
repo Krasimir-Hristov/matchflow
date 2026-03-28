@@ -37,27 +37,27 @@ export async function POST(req: Request): Promise<Response> {
       .map((o) => `- ${o.title}: ${o.description}`)
       .join('\n');
 
-    const prompt = `You are an expert financial consultant advising a broker preparing for a client meeting.
+    const prompt = `Du bist ein erfahrener Finanzberater, der einen Makler bei der Vorbereitung auf ein Kundengespräch unterstützt.
 
-Client Information:
+Kundeninformation:
 - Name: ${lead.firstName} ${lead.lastName}
-- Desired Loan Amount: ${lead.desiredAmount.toLocaleString('de-DE')} EUR
-- Phone: ${lead.phone}
-- Email: ${lead.email}
-- Meeting Date & Time: ${lead.bookedDate} at ${lead.bookedTime}
+- Gewünschter Kreditbetrag: ${lead.desiredAmount.toLocaleString('de-DE')} EUR
+- Telefon: ${lead.phone}
+- E-Mail: ${lead.email}
+- Besprechungsdatum & Uhrzeit: ${lead.bookedDate} um ${lead.bookedTime}
 
-Client's Liked Offers:
+Bevorzugte Angebote des Kunden:
 ${likedOffersList}
 
-Our Full Portfolio:
+Unser Gesamtportfolio:
 ${allOffersList}
 
-Please provide a SHORT preparation note for the broker (3-4 sentences in Bulgarian) that includes:
-1. KEY FOCUS AREAS: What to emphasize during the meeting based on their interest
-2. CROSS-SELL OPPORTUNITY: At least one recommendation from our portfolio that complements their interests
-3. TALKING POINTS: 1-2 specific benefits to highlight
+Bitte geben Sie eine KURZE Vorbereitung für den Makler an (3-4 Sätze auf Deutsch), die Folgendes enthält:
+1. SCHWERPUNKTBEREICHE: Was Sie während des Gesprächs basierend auf ihrem Interesse betonen sollten
+2. CROSS-SELL-GELEGENHEIT: Mindestens eine Empfehlung aus unserem Portfolio, die ihre Interessen ergänzt
+3. GESPRÄCHSPUNKTE: 1-2 spezifische Vorteile, die hervorzuheben sind
 
-Keep it concise and actionable. Do NOT include introductions or signatures - just the preparation notes.`;
+Halten Sie es prägnant und handlungsorientiert. KEINE Einführungen oder Unterschriften - nur die Vorbereitung.`;
 
     // Call Gemini API
     const genAI = new GoogleGenerativeAI(apiKey);
