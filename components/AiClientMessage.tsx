@@ -18,6 +18,8 @@ export function AiClientMessage({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchMessage = async () => {
       try {
         setLoading(true);
@@ -27,6 +29,7 @@ export function AiClientMessage({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ likedOfferIds }),
+          signal: controller.signal,
         });
 
         const data = await response.json();
@@ -37,15 +40,18 @@ export function AiClientMessage({
           setMessage(data.data || '');
         }
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') return;
         setError(
           err instanceof Error ? err.message : 'Failed to fetch message',
         );
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     };
 
     fetchMessage();
+
+    return () => controller.abort();
   }, [likedOfferIds]);
 
   return (
@@ -144,14 +150,14 @@ export function AiClientMessage({
           <div className='flex flex-col gap-3 sm:flex-row sm:justify-center'>
             <button
               onClick={() => window.history.back()}
-              className='rounded-full border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-50'
+              className='rounded-full border border-slate-300 bg-white cursor-pointer px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-50'
             >
               Zurück
             </button>
             <button
               onClick={() => onComplete(likedOfferIds)}
               disabled={loading || !!error}
-              className='rounded-full bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800 disabled:bg-emerald-300'
+              className='rounded-full cursor-pointer bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-emerald-300'
             >
               Zur Reservierung fortfahren
             </button>

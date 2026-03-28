@@ -174,7 +174,7 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
 
                 <button
                   onClick={() => setStep('form')}
-                  className='mt-4 w-full rounded-full border border-slate-300 px-4 py-3 font-semibold text-slate-700 transition hover:bg-slate-50'
+                  className='mt-4 cursor-pointer w-full rounded-full border border-slate-300 px-4 py-3 font-semibold text-slate-700 transition hover:bg-slate-50'
                 >
                   Zurück zu Details
                 </button>

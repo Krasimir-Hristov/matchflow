@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { getLeads } from '@/lib/storage';
 
 interface BookingCalendarProps {
   onSubmit: (date: string, time: string) => void;
@@ -12,6 +13,27 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [bookedSlots, setBookedSlots] = useState<Set<string>>(new Set());
+
+  // Load booked slots from storage
+  useEffect(() => {
+    try {
+      const leads = getLeads();
+      const slots = new Set<string>();
+      leads.forEach((lead) => {
+        slots.add(`${lead.bookedDate}_${lead.bookedTime}`);
+      });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setBookedSlots(slots);
+    } catch (error) {
+      console.error('Error loading booked slots:', error);
+    }
+  }, []);
+
+  // Check if a time slot is already booked
+  const isTimeSlotBooked = (date: string, time: string) => {
+    return bookedSlots.has(`${date}_${time}`);
+  };
 
   // Time slot options
   const timeSlots = [
@@ -105,7 +127,7 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
         <div className='mb-4 flex items-center justify-between'>
           <button
             onClick={handlePrevMonth}
-            className='rounded-full border border-slate-200 bg-white p-2 transition hover:bg-slate-50'
+            className='cursor-pointer rounded-full border border-slate-200 bg-white p-2 transition hover:bg-slate-50'
           >
             <ChevronLeft className='h-5 w-5 text-slate-700' />
           </button>
@@ -114,7 +136,7 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
           </h4>
           <button
             onClick={handleNextMonth}
-            className='rounded-full border border-slate-200 bg-white p-2 transition hover:bg-slate-50'
+            className='cursor-pointer rounded-full border border-slate-200 bg-white p-2 transition hover:bg-slate-50'
           >
             <ChevronRight className='h-5 w-5 text-slate-700' />
           </button>
@@ -150,8 +172,8 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
                   isDisabled
                     ? 'cursor-not-allowed bg-slate-100 text-slate-400'
                     : isSelected
-                      ? 'bg-emerald-700 text-white shadow-lg shadow-emerald-900/15'
-                      : 'border border-slate-200 bg-white text-slate-800 hover:border-emerald-500'
+                      ? 'cursor-pointer bg-emerald-700 text-white shadow-lg shadow-emerald-900/15'
+                      : 'cursor-pointer border border-slate-200 bg-white text-slate-800 hover:border-emerald-500'
                 }`}
               >
                 {day}
@@ -170,19 +192,25 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
             Zeit wählen
           </h3>
           <div className='grid grid-cols-4 gap-2'>
-            {timeSlots.map((time) => (
-              <button
-                key={time}
-                onClick={() => setSelectedTime(time)}
-                className={`rounded-2xl py-2.5 text-sm font-medium transition ${
-                  selectedTime === time
-                    ? 'bg-slate-900 text-white'
-                    : 'border border-slate-200 bg-white text-slate-800 hover:border-emerald-500'
-                }`}
-              >
-                {time}
-              </button>
-            ))}
+            {timeSlots.map((time) => {
+              const isBooked = isTimeSlotBooked(selectedDate, time);
+              return (
+                <button
+                  key={time}
+                  onClick={() => !isBooked && setSelectedTime(time)}
+                  disabled={isBooked}
+                  className={`rounded-2xl py-2.5 text-sm font-medium transition ${
+                    isBooked
+                      ? 'cursor-not-allowed border border-slate-200 bg-slate-100 text-slate-400'
+                      : selectedTime === time
+                        ? 'cursor-pointer bg-slate-900 text-white'
+                        : 'cursor-pointer border border-slate-200 bg-white text-slate-800 hover:border-emerald-500'
+                  }`}
+                >
+                  {time}
+                </button>
+              );
+            })}
           </div>
         </motion.div>
       )}
@@ -210,7 +238,7 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
       <button
         onClick={handleSubmit}
         disabled={!selectedDate || !selectedTime}
-        className='w-full rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition duration-200 hover:bg-emerald-800 disabled:bg-slate-300'
+        className='w-full cursor-pointer rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition duration-200 hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-slate-300'
       >
         Reservierung bestätigen
       </button>

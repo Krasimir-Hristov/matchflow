@@ -9,13 +9,6 @@ export async function POST(req: Request): Promise<Response> {
   try {
     const { likedOfferIds } = (await req.json()) as ClientMessageRequest;
 
-    if (!likedOfferIds || likedOfferIds.length === 0) {
-      return Response.json(
-        { data: null, error: 'No liked offers provided' },
-        { status: 400 },
-      );
-    }
-
     // Get the API key from environment
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -23,6 +16,31 @@ export async function POST(req: Request): Promise<Response> {
         { data: null, error: 'GEMINI_API_KEY is not configured' },
         { status: 500 },
       );
+    }
+
+    // If no offers were liked, generate an encouraging message to book with an agent
+    if (!likedOfferIds || likedOfferIds.length === 0) {
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+      const noLikesPrompt = `You are a friendly financial advisor for a German lending platform. A client has reviewed all available loan offers but didn't select any specific offer to like. 
+
+Generate a SHORT, warm, and encouraging message (2-3 sentences in German) that:
+1. Thanks them for reviewing the offers
+2. Acknowledges that every client has unique needs
+3. Warmly invites them to book a consultation with a real financial broker who can discuss their specific situation and find the perfect lending solution
+
+Keep it friendly and professional. Do NOT include greetings or signatures—just the main message.`;
+
+      const result = await model.generateContent(noLikesPrompt);
+      const responseText =
+        result.response.text() ||
+        'Unable to generate message. Please try again.';
+
+      return Response.json({
+        data: responseText,
+        error: null,
+      });
     }
 
     // Find the liked offers
@@ -37,7 +55,7 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // Build the prompt
+    // Build the prompt for clients with selected offers
     const offersList = likedOffers
       .map((o) => `- ${o.title}: ${o.description}`)
       .join('\n');

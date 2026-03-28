@@ -204,7 +204,7 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
             type='button'
             aria-label='Angebot ueberspringen'
             onClick={() => void animateSwipe('left')}
-            className='group flex h-16 w-16 items-center justify-center rounded-full border-2 border-rose-200 bg-white text-rose-500 shadow-[0_12px_30px_rgba(244,63,94,0.14)] transition hover:-translate-y-0.5 hover:border-rose-300 hover:text-rose-600 hover:shadow-[0_18px_36px_rgba(244,63,94,0.18)]'
+            className='group cursor-pointer flex h-16 w-16 items-center justify-center rounded-full border-2 border-rose-200 bg-white text-rose-500 shadow-[0_12px_30px_rgba(244,63,94,0.14)] transition hover:-translate-y-0.5 hover:border-rose-300 hover:text-rose-600 hover:shadow-[0_18px_36px_rgba(244,63,94,0.18)]'
           >
             <X
               className='h-7 w-7 transition group-hover:scale-110'
@@ -215,7 +215,7 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
             type='button'
             aria-label='Angebot merken'
             onClick={() => void animateSwipe('right')}
-            className='group flex h-20 w-20 items-center justify-center rounded-full border-2 border-emerald-200 bg-linear-to-br from-emerald-50 to-white text-emerald-600 shadow-[0_14px_34px_rgba(16,185,129,0.16)] transition hover:-translate-y-0.5 hover:border-emerald-300 hover:text-emerald-700 hover:shadow-[0_20px_40px_rgba(16,185,129,0.22)]'
+            className='group cursor-pointer flex h-20 w-20 items-center justify-center rounded-full border-2 border-emerald-200 bg-linear-to-br from-emerald-50 to-white text-emerald-600 shadow-[0_14px_34px_rgba(16,185,129,0.16)] transition hover:-translate-y-0.5 hover:border-emerald-300 hover:text-emerald-700 hover:shadow-[0_20px_40px_rgba(16,185,129,0.22)]'
           >
             <Heart
               className='h-8 w-8 fill-current transition group-hover:scale-110'

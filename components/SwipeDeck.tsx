@@ -63,7 +63,7 @@ export function SwipeDeck({ offers, onComplete }: SwipeDeckProps) {
           </p>
           <button
             onClick={() => window.location.reload()}
-            className='rounded-full bg-emerald-700 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-emerald-800'
+            className='cursor-pointer rounded-full bg-emerald-700 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-emerald-800'
           >
             Erneut überprüfen
           </button>

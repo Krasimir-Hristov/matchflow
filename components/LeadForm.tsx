@@ -199,7 +199,7 @@ export function LeadForm({ onSubmit }: LeadFormProps) {
 
       <button
         type='submit'
-        className='w-full rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition duration-200 hover:bg-emerald-800'
+        className='w-full cursor-pointer rounded-full bg-emerald-700 px-4 py-3 font-semibold text-white transition duration-200 hover:bg-emerald-800'
       >
         Zur Reservierung fortfahren
       </button>

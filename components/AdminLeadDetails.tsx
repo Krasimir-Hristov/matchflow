@@ -56,7 +56,7 @@ export function AdminLeadDetails({
         <div className='max-w-4xl mx-auto px-4 py-6 flex items-center gap-4'>
           <button
             onClick={onBack}
-            className='p-2 hover:bg-gray-100 rounded-lg transition'
+            className='cursor-pointer p-2 hover:bg-gray-100 rounded-lg transition'
           >
             <ArrowLeft className='w-6 h-6 text-gray-700' />
           </button>
@@ -196,9 +196,9 @@ export function AdminLeadDetails({
                 <button
                   onClick={handleGeneratePrepNotes}
                   disabled={loadingNotes}
-                  className={`px-4 py-2 rounded-lg font-semibold transition text-sm ${
+                  className={`cursor-pointer px-4 py-2 rounded-lg font-semibold transition text-sm ${
                     loadingNotes
-                      ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                      ? 'cursor-not-allowed bg-gray-300 text-gray-600'
                       : 'bg-purple-600 hover:bg-purple-700 text-white'
                   }`}
                 >

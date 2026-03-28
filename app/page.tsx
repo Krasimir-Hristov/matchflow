@@ -44,14 +44,8 @@ export default function Home() {
           </div>
           <div className='flex items-center gap-2 rounded-full border border-slate-200/70 bg-slate-50/80 p-1.5 text-sm font-medium text-slate-600 shadow-sm'>
             <Link
-              href='/'
-              className='rounded-full px-4 py-2 text-slate-700 transition hover:bg-white hover:text-emerald-700'
-            >
-              Kundenfluss
-            </Link>
-            <Link
               href='/admin'
-              className='rounded-full px-4 py-2 text-slate-700 transition hover:bg-white hover:text-emerald-700'
+              className='cursor-pointer rounded-full px-4 py-2 text-slate-700 transition hover:bg-white hover:text-emerald-700'
             >
               Makler-Dashboard
             </Link>
