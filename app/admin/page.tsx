@@ -1,12 +1,13 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { ClientLead } from '@/lib/types';
 import { getLeads } from '@/lib/storage';
 import { mockOffers } from '@/lib/mockOffers';
 import { AdminLeadDetails } from '@/components/AdminLeadDetails';
 import { motion } from 'framer-motion';
-import { Home, Users } from 'lucide-react';
+import { ArrowLeft, Home, Users } from 'lucide-react';
 
 export default function AdminPage() {
   const [leads] = useState<ClientLead[]>(() => getLeads());
@@ -33,11 +34,21 @@ export default function AdminPage() {
       {/* Header */}
       <header className='bg-white shadow-sm border-b border-gray-200'>
         <div className='max-w-7xl mx-auto px-4 py-6'>
-          <div className='flex items-center gap-3 mb-2'>
-            <Users className='w-8 h-8 text-blue-600' />
-            <h1 className='text-3xl font-bold text-gray-900'>
-              Makler-Dashboard
-            </h1>
+          <div className='flex items-center justify-between gap-3 mb-2'>
+            <Link
+              href='/'
+              className='inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50'
+            >
+              <ArrowLeft className='h-4 w-4' />
+              Zuruck
+            </Link>
+            <div className='flex items-center gap-3'>
+              <Users className='w-8 h-8 text-blue-600' />
+              <h1 className='text-3xl font-bold text-gray-900'>
+                Makler-Dashboard
+              </h1>
+            </div>
+            <div className='w-23' />
           </div>
           <p className='text-gray-600'>
             Bevorstehende Kundenbesprechungen verwalten
