@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Matchflow | Premium Lending Concierge',
+  title: 'FINDER | Premium Lending Concierge',
   description:
     'Premium green-gray lending experience for curated financial offers.',
 };

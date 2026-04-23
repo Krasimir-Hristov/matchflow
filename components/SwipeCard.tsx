@@ -161,7 +161,7 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
           {offer.description}
         </p>
 
-        <div className='grid gap-3 sm:grid-cols-3'>
+        <div className='grid gap-3 sm:grid-cols-2'>
           <div className='rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-4'>
             <p className='text-xs uppercase tracking-[0.18em] text-slate-500'>
               Kreditrahmen
@@ -170,21 +170,25 @@ export function SwipeCard({ offer, onSwipe }: SwipeCardProps) {
               {formatCurrency(offer.maxAmount)}
             </p>
           </div>
-          <div className='rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-4'>
-            <p className='text-xs uppercase tracking-[0.18em] text-slate-500'>
-              Sollzins
-            </p>
-            <p className='mt-2 text-lg font-semibold text-emerald-700'>
-              {offer.interestRate}%
-            </p>
-          </div>
-          <div className='rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-4'>
-            <p className='text-xs uppercase tracking-[0.18em] text-slate-500'>
-              Monatsrate ca.
-            </p>
-            <p className='mt-2 text-lg font-semibold text-slate-950'>
-              {formatCurrency(Math.round(monthlyPayment))}
-            </p>
+          <div className='flex flex-col justify-center rounded-[1.25rem] border border-emerald-200/60 bg-linear-to-br from-emerald-50 to-teal-50 p-4 overflow-hidden relative'>
+            <div className='absolute -right-4 -top-4 h-16 w-16 rounded-full bg-emerald-200/40' />
+            <div className='absolute -bottom-3 -left-3 h-10 w-10 rounded-full bg-teal-200/50' />
+            <div className='relative flex items-center gap-2'>
+              <div className='flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/20'>
+                <span className='text-emerald-700 text-xs'>✦</span>
+              </div>
+              <span className='text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700'>
+                Top Angebot
+              </span>
+            </div>
+            <div className='relative mt-1.5 flex gap-1'>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div
+                  key={i}
+                  className={`h-1.5 flex-1 rounded-full ${i <= 4 ? 'bg-emerald-400' : 'bg-emerald-100'}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
