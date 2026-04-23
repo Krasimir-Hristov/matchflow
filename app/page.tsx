@@ -2,26 +2,26 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { SwipeDeck } from '@/components/SwipeDeck';
+import { QuestionDeck } from '@/components/QuestionDeck';
 import { AiClientMessage } from '@/components/AiClientMessage';
 import { BookingFlow } from '@/components/BookingFlow';
-import { mockOffers } from '@/lib/mockOffers';
+import { rootQuestions } from '@/lib/questions';
+import { QuestionAnswer } from '@/lib/types';
 
 type FlowStep = 'swipe' | 'message' | 'booking';
 
 export default function Home() {
   const [step, setStep] = useState<FlowStep>('swipe');
-  const [likedOfferIds, setLikedOfferIds] = useState<string[]>([]);
+  const [answers, setAnswers] = useState<QuestionAnswer[]>([]);
 
-  const handleSwipeComplete = (offers: string[]) => {
-    setLikedOfferIds(offers);
+  const handleQuestionsComplete = (completed: QuestionAnswer[]) => {
+    setAnswers(completed);
     setStep('message');
   };
 
   const handleBookingSuccess = () => {
-    // Reset flow
     setStep('swipe');
-    setLikedOfferIds([]);
+    setAnswers([]);
   };
 
   return (
@@ -105,19 +105,22 @@ export default function Home() {
       {/* Main Content */}
       <main className='pt-20'>
         {step === 'swipe' && (
-          <SwipeDeck offers={mockOffers} onComplete={handleSwipeComplete} />
+          <QuestionDeck
+            questions={rootQuestions}
+            onComplete={handleQuestionsComplete}
+          />
         )}
 
         {step === 'message' && (
           <AiClientMessage
-            likedOfferIds={likedOfferIds}
+            answers={answers}
             onComplete={() => setStep('booking')}
           />
         )}
 
         {step === 'booking' && (
           <BookingFlow
-            likedOfferIds={likedOfferIds}
+            questionAnswers={answers}
             onSuccess={handleBookingSuccess}
           />
         )}

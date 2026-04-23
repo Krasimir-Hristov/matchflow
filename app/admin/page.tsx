@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { ClientLead } from '@/lib/types';
 import { getLeads } from '@/lib/storage';
-import { mockOffers } from '@/lib/mockOffers';
 import { AdminLeadDetails } from '@/components/AdminLeadDetails';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Home, Users } from 'lucide-react';
@@ -20,13 +19,7 @@ export default function AdminPage() {
 
   // If a lead is selected, show the details view
   if (selectedLead) {
-    return (
-      <AdminLeadDetails
-        lead={selectedLead}
-        offers={mockOffers}
-        onBack={handleBack}
-      />
-    );
+    return <AdminLeadDetails lead={selectedLead} onBack={handleBack} />;
   }
 
   return (

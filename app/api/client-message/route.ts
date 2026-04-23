@@ -1,13 +1,13 @@
-import { mockOffers } from '@/lib/mockOffers';
+import { QuestionAnswer } from '@/lib/types';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 interface ClientMessageRequest {
-  likedOfferIds: string[];
+  answers: QuestionAnswer[];
 }
 
 export async function POST(req: Request): Promise<Response> {
   try {
-    const { likedOfferIds } = (await req.json()) as ClientMessageRequest;
+    const { answers } = (await req.json()) as ClientMessageRequest;
 
     // Get the API key from environment
     const apiKey = process.env.GEMINI_API_KEY;
@@ -18,62 +18,30 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // If no offers were liked, generate an encouraging message to book with an agent
-    if (!likedOfferIds || likedOfferIds.length === 0) {
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-
-      const noLikesPrompt = `Du bist ein freundlicher Finanzberater für eine deutsche Kreditplattform. Ein Kunde hat alle verfügbaren Kreditangebote geprüft, aber kein bestimmtes Angebot ausgewählt.
-
-Erstelle eine KURZE, warme und ermutigende Nachricht (2-3 Sätze auf Deutsch), die:
-1. Sich für die Prüfung der Angebote bedankt
-2. Anerkennt, dass jeder Kunde individuelle Bedürfnisse hat
-3. Herzlich dazu einlädt, eine Beratung mit einem echten Finanzmakler zu buchen, der die spezifische Situation besprechen und die perfekte Finanzierungslösung finden kann
-
-Halte den Ton freundlich und professionell. Füge KEINE Begrüßungen oder Unterschriften hinzu – nur die eigentliche Nachricht.`;
-
-      const result = await model.generateContent(noLikesPrompt);
-      const responseText =
-        result.response.text() ||
-        'Unable to generate message. Please try again.';
-
-      return Response.json({
-        data: responseText,
-        error: null,
-      });
-    }
-
-    // Find the liked offers
-    const likedOffers = mockOffers.filter((offer) =>
-      likedOfferIds.includes(offer.id),
-    );
-
-    if (likedOffers.length === 0) {
-      return Response.json(
-        { data: null, error: 'No matching offers found' },
-        { status: 400 },
-      );
-    }
-
-    // Build the prompt for clients with selected offers
-    const offersList = likedOffers
-      .map((o) => `- ${o.title}: ${o.description}`)
-      .join('\n');
-
-    const prompt = `Du bist ein freundlicher Finanzberater-Assistent für den deutschen Kreditmarkt. Ein Kunde hat Interesse an folgenden Kreditangeboten gezeigt:
-
-${offersList}
-
-Schreibe eine kurze, ansprechende und personalisierte Nachricht (2-3 Sätze auf Deutsch), die:
-1. Das Interesse an diesen spezifischen Kreditarten anerkennt
-2. Zusammenfasst, welche finanziellen Bedürfnisse der Kunde zu haben scheint
-3. Dazu einlädt, einen Termin mit einem unserer Finanzmakler zu buchen, um die Optionen zu besprechen
-
-Halte den Ton warm, professionell und ermutigend. Füge KEINE Begrüßungen oder Unterschriften hinzu – nur die eigentliche Nachricht.`;
-
-    // Call Gemini API
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+    // Build profile from YES answers
+    const yesAnswers = (answers ?? []).filter((a) => a.answer === 'yes');
+
+    const profileLines =
+      yesAnswers.length > 0
+        ? yesAnswers.map((a) => `- ${a.category}: ${a.questionText}`).join('\n')
+        : 'Keine spezifischen Angaben gemacht.';
+
+    const prompt = `Du bist ein überzeugender, warmer Finanzberater für eine deutsche Premium-Finanzierungsplattform namens Finder.
+
+Ein Kunde hat gerade seinen persönlichen Speedcheck abgeschlossen. Hier sind seine JA-Antworten (sein Profil):
+
+${profileLines}
+
+Schreibe einen kurzen, PERSÖNLICHEN und ÜBERZEUGENDEN Call-to-Action Text auf Deutsch (3-4 Sätze), der:
+1. Das Profil des Kunden direkt anspricht (z.B. seinen Familienstand, Wohnsituation, Einkommen)
+2. Erklärt, warum sein spezifisches Profil SEHR GUTE Finanzierungsmöglichkeiten bietet
+3. Den Kunden MOTIVIERT und BEGEISTERT, jetzt einen kostenlosen Beratungstermin zu buchen
+4. Einen klaren Handlungsaufruf enthält (Termin buchen)
+
+Ton: warm, professionell, persönlich und optimistisch — kein Fachjargon. KEINE Begrüßung oder Unterschrift, nur die Nachricht selbst.`;
 
     const result = await model.generateContent(prompt);
     const responseText =

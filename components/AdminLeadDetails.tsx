@@ -1,26 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { ClientLead, Offer } from '@/lib/types';
+import { ClientLead } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
 
 interface AdminLeadDetailsProps {
   lead: ClientLead;
-  offers: Offer[];
   onBack: () => void;
 }
 
-export function AdminLeadDetails({
-  lead,
-  offers,
-  onBack,
-}: AdminLeadDetailsProps) {
+export function AdminLeadDetails({ lead, onBack }: AdminLeadDetailsProps) {
   const [prepNotes, setPrepNotes] = useState<string>('');
   const [loadingNotes, setLoadingNotes] = useState(false);
   const [notesError, setNotesError] = useState<string | null>(null);
 
-  const likedOffers = offers.filter((o) => lead.likedOfferIds.includes(o.id));
+  // Group question answers by category
+  const answersByCategory = (lead.questionAnswers ?? []).reduce<
+    Record<string, typeof lead.questionAnswers>
+  >((acc, ans) => {
+    if (!acc[ans.category]) acc[ans.category] = [];
+    acc[ans.category].push(ans);
+    return acc;
+  }, {});
 
   const handleGeneratePrepNotes = async () => {
     setLoadingNotes(true);
@@ -30,7 +32,7 @@ export function AdminLeadDetails({
       const response = await fetch('/api/agent-prep', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lead, offers }),
+        body: JSON.stringify({ lead }),
       });
 
       const data = await response.json();
@@ -145,46 +147,74 @@ export function AdminLeadDetails({
             transition={{ delay: 0.1 }}
             className='lg:col-span-2 space-y-6'
           >
-            {/* Liked Offers Card */}
+            {/* Speedcheck Profile */}
             <div className='bg-white rounded-lg shadow p-6'>
-              <h3 className='text-lg font-semibold text-gray-800 mb-4'>
-                Ausgewählte Kreditangebote ({likedOffers.length})
-              </h3>
-              <div className='space-y-4'>
-                {likedOffers.length > 0 ? (
-                  likedOffers.map((offer) => (
-                    <motion.div
-                      key={offer.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className='border border-blue-200 rounded-lg p-4 bg-linear-to-r from-blue-50 to-transparent'
-                    >
-                      <p className='font-semibold text-gray-900'>
-                        {offer.title}
-                      </p>
-                      <p className='text-sm text-gray-600 mt-1'>
-                        {offer.description}
-                      </p>
-                      <div className='flex gap-4 mt-3 text-sm'>
-                        <span className='text-gray-700'>
-                          Max:{' '}
-                          <span className='font-semibold text-green-600'>
-                            {offer.maxAmount.toLocaleString('de-DE')} EUR
-                          </span>
-                        </span>
-                        <span className='text-gray-700'>
-                          Satz:{' '}
-                          <span className='font-semibold text-blue-600'>
-                            {offer.interestRate}%
-                          </span>
-                        </span>
-                      </div>
-                    </motion.div>
-                  ))
-                ) : (
-                  <p className='text-gray-600'>Keine Angebote ausgewählt</p>
-                )}
+              <div className='flex items-center justify-between mb-5'>
+                <h3 className='text-lg font-semibold text-gray-800'>
+                  Speedcheck Profil
+                </h3>
+                <span className='text-xs font-semibold uppercase tracking-widest text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1'>
+                  {
+                    (lead.questionAnswers ?? []).filter(
+                      (a) => a.answer === 'yes',
+                    ).length
+                  }{' '}
+                  JA
+                </span>
               </div>
+              {Object.keys(answersByCategory).length === 0 ? (
+                <p className='text-gray-500 text-sm'>
+                  Keine Speedcheck-Daten vorhanden.
+                </p>
+              ) : (
+                <div className='space-y-5'>
+                  {Object.entries(answersByCategory).map(
+                    ([category, catAnswers]) => (
+                      <div key={category}>
+                        <p className='text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 mb-2'>
+                          {category}
+                        </p>
+                        <div className='space-y-2'>
+                          {catAnswers.map((ans) => (
+                            <div
+                              key={ans.questionId}
+                              className={`flex items-start gap-3 rounded-xl px-4 py-3 border ${
+                                ans.answer === 'yes'
+                                  ? 'bg-emerald-50 border-emerald-200'
+                                  : 'bg-slate-50 border-slate-200'
+                              }`}
+                            >
+                              <span
+                                className={`mt-0.5 shrink-0 text-sm font-bold ${
+                                  ans.answer === 'yes'
+                                    ? 'text-emerald-600'
+                                    : 'text-slate-400'
+                                }`}
+                              >
+                                {ans.answer === 'yes' ? '✓' : '✗'}
+                              </span>
+                              <div className='flex-1 min-w-0'>
+                                <p className='text-sm text-gray-800 leading-snug'>
+                                  {ans.questionText}
+                                </p>
+                              </div>
+                              <span
+                                className={`text-xs font-semibold uppercase rounded-full px-2 py-0.5 shrink-0 ${
+                                  ans.answer === 'yes'
+                                    ? 'text-emerald-700 bg-emerald-100'
+                                    : 'text-slate-500 bg-slate-100'
+                                }`}
+                              >
+                                {ans.answer === 'yes' ? 'JA' : 'NEIN'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ),
+                  )}
+                </div>
+              )}
             </div>
 
             {/* AI Prep Notes Card */}

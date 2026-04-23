@@ -1,18 +1,17 @@
-import { ClientLead, Offer } from '@/lib/types';
+import { ClientLead } from '@/lib/types';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 interface AgentPrepRequest {
   lead: ClientLead;
-  offers: Offer[];
 }
 
 export async function POST(req: Request): Promise<Response> {
   try {
-    const { lead, offers } = (await req.json()) as AgentPrepRequest;
+    const { lead } = (await req.json()) as AgentPrepRequest;
 
-    if (!lead || !offers) {
+    if (!lead) {
       return Response.json(
-        { data: null, error: 'Lead and offers are required' },
+        { data: null, error: 'Lead is required' },
         { status: 400 },
       );
     }
@@ -26,38 +25,46 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // Get the liked offers
-    const likedOffers = offers.filter((o) => lead.likedOfferIds.includes(o.id));
-    const likedOffersList = likedOffers
-      .map((o) => `- ${o.title} (${o.maxAmount} EUR, ${o.interestRate}%)`)
-      .join('\n');
+    const answers = lead.questionAnswers ?? [];
+    const yesAnswers = answers.filter((a) => a.answer === 'yes');
+    const noAnswers = answers.filter((a) => a.answer === 'no');
 
-    // Get all offers for context
-    const allOffersList = offers
-      .map((o) => `- ${o.title}: ${o.description}`)
-      .join('\n');
+    const yesLines =
+      yesAnswers.length > 0
+        ? yesAnswers
+            .map((a) => `  ✓ [${a.category}] ${a.questionText}`)
+            .join('\n')
+        : '  (keine JA-Antworten)';
+
+    const noLines =
+      noAnswers.length > 0
+        ? noAnswers
+            .map((a) => `  ✗ [${a.category}] ${a.questionText}`)
+            .join('\n')
+        : '  (keine NEIN-Antworten)';
 
     const prompt = `Du bist ein erfahrener Finanzberater, der einen Makler bei der Vorbereitung auf ein Kundengespräch unterstützt.
 
 Kundeninformation:
 - Name: ${lead.firstName} ${lead.lastName}
-- Gewünschter Kreditbetrag: ${lead.desiredAmount.toLocaleString('de-DE')} EUR
+- Gewünschter Betrag: ${lead.desiredAmount.toLocaleString('de-DE')} EUR
 - Telefon: ${lead.phone}
 - E-Mail: ${lead.email}
-- Besprechungsdatum & Uhrzeit: ${lead.bookedDate} um ${lead.bookedTime}
+- Termin: ${lead.bookedDate} um ${lead.bookedTime}
 
-Bevorzugte Angebote des Kunden:
-${likedOffersList}
+Speedcheck-Ergebnisse — JA-Antworten (Profil des Kunden):
+${yesLines}
 
-Unser Gesamtportfolio:
-${allOffersList}
+Speedcheck-Ergebnisse — NEIN-Antworten:
+${noLines}
 
-Bitte geben Sie eine KURZE Vorbereitung für den Makler an (3-4 Sätze auf Deutsch), die Folgendes enthält:
-1. SCHWERPUNKTBEREICHE: Was Sie während des Gesprächs basierend auf ihrem Interesse betonen sollten
-2. CROSS-SELL-GELEGENHEIT: Mindestens eine Empfehlung aus unserem Portfolio, die ihre Interessen ergänzt
-3. GESPRÄCHSPUNKTE: 1-2 spezifische Vorteile, die hervorzuheben sind
+Erstelle eine KURZE, handlungsorientierte Makler-Vorbereitung auf Deutsch (4-5 Sätze), die:
+1. Das Kundenprofil basierend auf den JA-Antworten zusammenfasst
+2. Die relevantesten Finanzierungsprodukte für dieses Profil nennt
+3. Konkrete Gesprächspunkte und Empfehlungen für das Meeting gibt
+4. Auf mögliche Bedenken oder Einschränkungen hinweist (z.B. befristeter Vertrag)
 
-Halten Sie es prägnant und handlungsorientiert. KEINE Einführungen oder Unterschriften - nur die Vorbereitung.`;
+KEINE Begrüßung oder Unterschrift — nur die Vorbereitung.`;
 
     // Call Gemini API
     const genAI = new GoogleGenerativeAI(apiKey);

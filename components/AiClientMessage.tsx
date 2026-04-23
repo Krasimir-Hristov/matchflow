@@ -4,15 +4,14 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, AlertCircle } from 'lucide-react';
 
+import { QuestionAnswer } from '@/lib/types';
+
 interface AiClientMessageProps {
-  likedOfferIds: string[];
-  onComplete: (likedOfferIds: string[]) => void;
+  answers: QuestionAnswer[];
+  onComplete: () => void;
 }
 
-export function AiClientMessage({
-  likedOfferIds,
-  onComplete,
-}: AiClientMessageProps) {
+export function AiClientMessage({ answers, onComplete }: AiClientMessageProps) {
   const [message, setMessage] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +27,7 @@ export function AiClientMessage({
         const response = await fetch('/api/client-message', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ likedOfferIds }),
+          body: JSON.stringify({ answers }),
           signal: controller.signal,
         });
 
@@ -52,7 +51,7 @@ export function AiClientMessage({
     fetchMessage();
 
     return () => controller.abort();
-  }, [likedOfferIds]);
+  }, [answers]);
 
   return (
     <div className='relative min-h-screen overflow-hidden px-4 py-12 sm:px-6'>
@@ -140,7 +139,8 @@ export function AiClientMessage({
                   Beraternotiz
                 </p>
                 <span className='rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-medium text-emerald-800'>
-                  {likedOfferIds.length} ausgewählt
+                  {answers.filter((a) => a.answer === 'yes').length}{' '}
+                  JA-Antworten
                 </span>
               </div>
               <p className='text-lg leading-8 text-slate-800'>{message}</p>
@@ -155,7 +155,7 @@ export function AiClientMessage({
               Zurück
             </button>
             <button
-              onClick={() => onComplete(likedOfferIds)}
+              onClick={() => onComplete()}
               disabled={loading || !!error}
               className='rounded-full cursor-pointer bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-emerald-300'
             >
@@ -166,8 +166,8 @@ export function AiClientMessage({
 
         <div className='mt-6 text-center text-sm text-slate-600'>
           <p>
-            You selected {likedOfferIds.length} loan offer
-            {likedOfferIds.length !== 1 ? 's' : ''}
+            {answers.filter((a) => a.answer === 'yes').length} JA-Antworten aus{' '}
+            {answers.length} Fragen
           </p>
         </div>
       </motion.div>

@@ -5,12 +5,12 @@ import { motion } from 'framer-motion';
 import { LeadForm } from './LeadForm';
 import { BookingCalendar } from './BookingCalendar';
 import { addLead } from '@/lib/storage';
-import { ClientLead } from '@/lib/types';
+import { ClientLead, QuestionAnswer } from '@/lib/types';
 import { v4 as uuidv4 } from 'uuid';
 import { CheckCircle } from 'lucide-react';
 
 interface BookingFlowProps {
-  likedOfferIds: string[];
+  questionAnswers: QuestionAnswer[];
   onSuccess: () => void;
 }
 
@@ -24,7 +24,7 @@ interface LeadFormData {
   desiredAmount: number;
 }
 
-export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
+export function BookingFlow({ questionAnswers, onSuccess }: BookingFlowProps) {
   const [step, setStep] = useState<FlowStep>('form');
   const [formData, setFormData] = useState<LeadFormData | null>(null);
 
@@ -43,7 +43,8 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
       email: formData.email,
       phone: formData.phone,
       desiredAmount: formData.desiredAmount,
-      likedOfferIds,
+      likedOfferIds: [],
+      questionAnswers,
       bookedDate: date,
       bookedTime: time,
     };
@@ -111,9 +112,9 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
             </div>
 
             <div className='mt-8 rounded-[1.5rem] border border-white/10 bg-white/5 p-5'>
-              <p className='text-sm text-slate-400'>Ausgewählte Angebote</p>
+              <p className='text-sm text-slate-400'>JA-Antworten</p>
               <p className='mt-2 text-3xl font-semibold text-emerald-300'>
-                {likedOfferIds.length}
+                {questionAnswers.filter((a) => a.answer === 'yes').length}
               </p>
             </div>
           </div>
@@ -231,8 +232,8 @@ export function BookingFlow({ likedOfferIds, onSuccess }: BookingFlowProps) {
 
         <div className='mt-6 text-center text-sm text-slate-600'>
           <p>
-            Ausgewählte {likedOfferIds.length} Kreditangebot
-            {likedOfferIds.length !== 1 ? 'e' : ''}
+            {questionAnswers.filter((a) => a.answer === 'yes').length}{' '}
+            JA-Antworten erfasst
           </p>
         </div>
       </motion.div>
