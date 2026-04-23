@@ -23,14 +23,14 @@ export async function POST(req: Request): Promise<Response> {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-      const noLikesPrompt = `You are a friendly financial advisor for a German lending platform. A client has reviewed all available loan offers but didn't select any specific offer to like. 
+      const noLikesPrompt = `Du bist ein freundlicher Finanzberater für eine deutsche Kreditplattform. Ein Kunde hat alle verfügbaren Kreditangebote geprüft, aber kein bestimmtes Angebot ausgewählt.
 
-Generate a SHORT, warm, and encouraging message (2-3 sentences in German) that:
-1. Thanks them for reviewing the offers
-2. Acknowledges that every client has unique needs
-3. Warmly invites them to book a consultation with a real financial broker who can discuss their specific situation and find the perfect lending solution
+Erstelle eine KURZE, warme und ermutigende Nachricht (2-3 Sätze auf Deutsch), die:
+1. Sich für die Prüfung der Angebote bedankt
+2. Anerkennt, dass jeder Kunde individuelle Bedürfnisse hat
+3. Herzlich dazu einlädt, eine Beratung mit einem echten Finanzmakler zu buchen, der die spezifische Situation besprechen und die perfekte Finanzierungslösung finden kann
 
-Keep it friendly and professional. Do NOT include greetings or signatures—just the main message.`;
+Halte den Ton freundlich und professionell. Füge KEINE Begrüßungen oder Unterschriften hinzu – nur die eigentliche Nachricht.`;
 
       const result = await model.generateContent(noLikesPrompt);
       const responseText =
@@ -60,16 +60,16 @@ Keep it friendly and professional. Do NOT include greetings or signatures—just
       .map((o) => `- ${o.title}: ${o.description}`)
       .join('\n');
 
-    const prompt = `You are a friendly financial advisor assistant for the German lending market. A client has shown interest in the following loan offers:
+    const prompt = `Du bist ein freundlicher Finanzberater-Assistent für den deutschen Kreditmarkt. Ein Kunde hat Interesse an folgenden Kreditangeboten gezeigt:
 
 ${offersList}
 
-  Write a short, engaging personalized message (2-3 sentences in German) that:
-1. Acknowledges their interest in these specific loan types
-2. Summarizes what financial needs they seem to have
-3. Invites them to book a meeting with one of our financial brokers to discuss their options
+Schreibe eine kurze, ansprechende und personalisierte Nachricht (2-3 Sätze auf Deutsch), die:
+1. Das Interesse an diesen spezifischen Kreditarten anerkennt
+2. Zusammenfasst, welche finanziellen Bedürfnisse der Kunde zu haben scheint
+3. Dazu einlädt, einen Termin mit einem unserer Finanzmakler zu buchen, um die Optionen zu besprechen
 
-Keep the tone warm, professional, and encouraging. Do NOT include any greetings or signatures—just the main message.`;
+Halte den Ton warm, professionell und ermutigend. Füge KEINE Begrüßungen oder Unterschriften hinzu – nur die eigentliche Nachricht.`;
 
     // Call Gemini API
     const genAI = new GoogleGenerativeAI(apiKey);
