@@ -72,12 +72,10 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
   }
 
   const formatDateString = (day: number) => {
-    const date = new Date(
-      currentMonth.getFullYear(),
-      currentMonth.getMonth(),
-      day,
-    );
-    return date.toISOString().split('T')[0];
+    const year = currentMonth.getFullYear();
+    const month = String(currentMonth.getMonth() + 1).padStart(2, '0');
+    const d = String(day).padStart(2, '0');
+    return `${year}-${month}-${d}`;
   };
 
   const isDateDisabled = (day: number) => {
@@ -224,11 +222,11 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
           <p className='text-sm text-slate-700'>
             Besprechung geplant für:{' '}
             <span className='font-semibold text-emerald-700'>
-              {new Date(selectedDate).toLocaleDateString('de-DE', {
+              {(() => { const [y, m, d] = selectedDate.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('de-DE', {
                 weekday: 'long',
                 month: 'long',
                 day: 'numeric',
-              })}{' '}
+              }); })()}{' '}
               at {selectedTime}
             </span>
           </p>
