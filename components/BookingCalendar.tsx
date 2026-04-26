@@ -222,11 +222,14 @@ export function BookingCalendar({ onSubmit }: BookingCalendarProps) {
           <p className='text-sm text-slate-700'>
             Besprechung geplant für:{' '}
             <span className='font-semibold text-emerald-700'>
-              {(() => { const [y, m, d] = selectedDate.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('de-DE', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
-              }); })()}{' '}
+              {(() => {
+                const [y, m, d] = selectedDate.split('-').map(Number);
+                return new Date(y, m - 1, d).toLocaleDateString('de-DE', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                });
+              })()}{' '}
               at {selectedTime}
             </span>
           </p>
